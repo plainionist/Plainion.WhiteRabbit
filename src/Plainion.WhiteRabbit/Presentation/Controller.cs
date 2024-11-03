@@ -27,29 +27,10 @@ namespace Plainion.WhiteRabbit.Presentation
             MainView = Activator.CreateInstance(initialView, this) as IView;
         }
 
-        public IView MainView
-        {
-            get;
-            private set;
-        }
-
-        public IView TimerView
-        {
-            get;
-            private set;
-        }
-
-        public DataTable CurrentDayData
-        {
-            get;
-            private set;
-        }
-
-        public DateTime CurrentDay
-        {
-            get;
-            private set;
-        }
+        public IView MainView { get; }
+        public IView TimerView { get; private set; }
+        public DataTable CurrentDayData { get; private set; }
+        public DateTime CurrentDay { get; private set; }
 
         public void ChangeDay(DateTime day)
         {

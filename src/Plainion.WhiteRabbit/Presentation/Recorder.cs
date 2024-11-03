@@ -5,10 +5,10 @@ namespace Plainion.WhiteRabbit.Presentation
 {
     internal class Recorder
     {
-        private Timer myElapsedTimer = null;
+        private readonly Timer myElapsedTimer = null;
         private DateTime myStartTime;
         private int myElapsedSeconds = 0;
-        private Channel myChannel = null;
+        private readonly Channel myChannel = null;
 
         public Recorder(Channel channel)
         {
@@ -20,29 +20,11 @@ namespace Plainion.WhiteRabbit.Presentation
             myElapsedTimer.Tick += myElapsedTimer_OnTick;
         }
 
-        public DateTime StartTime
-        {
-            get
-            {
-                return myStartTime;
-            }
-        }
+        public DateTime StartTime => myStartTime;
 
-        public DateTime StopTime
-        {
-            get
-            {
-                return myStartTime + Elapsed;
-            }
-        }
+        public DateTime StopTime => myStartTime + Elapsed;
 
-        public TimeSpan Elapsed
-        {
-            get
-            {
-                return new TimeSpan(0, 0, myElapsedSeconds);
-            }
-        }
+        public TimeSpan Elapsed => new(0, 0, myElapsedSeconds);
 
         public void Start()
         {
