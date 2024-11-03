@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Globalization;
 
-namespace Plainion.WhiteRabbit
+namespace Plainion.WhiteRabbit.Presentation.Reports
 {
-    public static class DateTimeExtensions
+    public class ReportBase
     {
+        public bool IsComplete { get; set; }
 
-        public static string ToReportString(this TimeSpan span)
+        protected static string FormatTimeSpan(TimeSpan span)
         {
             if (span == TimeSpan.Zero)
             {

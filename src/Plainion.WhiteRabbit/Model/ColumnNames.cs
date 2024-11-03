@@ -1,4 +1,4 @@
-﻿namespace Plainion.WhiteRabbit
+﻿namespace Plainion.WhiteRabbit.Model
 {
     internal class ColumnNames
     {

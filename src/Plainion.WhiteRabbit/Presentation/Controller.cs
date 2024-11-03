@@ -208,8 +208,10 @@ namespace Plainion.WhiteRabbit.Presentation
         {
             string file = Path.GetTempFileName();
 
-            var overview = new Dictionary<string, TimeSpan>(StringComparer.OrdinalIgnoreCase);
-            overview["unknown"] = new TimeSpan();
+            var overview = new Dictionary<string, TimeSpan>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["unknown"] = new TimeSpan()
+            };
 
             var details = new Dictionary<DateTime, Dictionary<string, TimeSpan>>();
 
@@ -248,16 +250,14 @@ namespace Plainion.WhiteRabbit.Presentation
             return file;
         }
 
-        public Database Database
-        {
-            get;
-            private set;
-        }
+        public Database Database { get;  }
 
         private Dictionary<string, TimeSpan> GetDetails(DateTime day, out bool isComplete)
         {
-            var data = new Dictionary<string, TimeSpan>(StringComparer.OrdinalIgnoreCase);
-            data["unknown"] = new TimeSpan();
+            var data = new Dictionary<string, TimeSpan>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["unknown"] = new TimeSpan()
+            };
 
             isComplete = true;
 

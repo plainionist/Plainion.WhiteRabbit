@@ -4,13 +4,12 @@ using System.IO;
 
 namespace Plainion.WhiteRabbit.Presentation.Reports
 {
-    public partial class RangeReport 
+    public partial class RangeReport : ReportBase
     {
         public DateTime Begin { get; set; }
         public DateTime End { get; set; }
         public Dictionary<string, TimeSpan> Overview { get; set; }
         public Dictionary<DateTime, Dictionary<string, TimeSpan>> Details { get; set; }
-        public bool IsComplete { get; set; }
 
         public void Generate(TextWriter writer)
         {
@@ -34,7 +33,7 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
 
                 writer.WriteLine($"    <tr>");
                 writer.WriteLine($"      <td>{cat}</td>");
-                writer.WriteLine($"      <td align='right'>{Overview[cat].ToReportString()}</td>");
+                writer.WriteLine($"      <td align='right'>{FormatTimeSpan(Overview[cat])}</td>");
                 writer.WriteLine($"    </tr>");
 
                 sum += Overview[cat];
@@ -44,13 +43,13 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
             {
                 writer.WriteLine($"    <tr>");
                 writer.WriteLine($"      <td><b>Unassigned</b></td>");
-                writer.WriteLine($"      <td>{Overview["unknown"].ToReportString()}</td>");
+                writer.WriteLine($"      <td>{FormatTimeSpan(Overview["unknown"])}</td>");
                 writer.WriteLine($"    </tr>");
             }
 
             writer.WriteLine($"    <tr>");
             writer.WriteLine($"      <td style='border-top:solid 2px #060'><b>Sum</b></td>");
-            writer.WriteLine($"      <td style='border-top:solid 2px #060'>{sum.ToReportString()}</td>");
+            writer.WriteLine($"      <td style='border-top:solid 2px #060'>{FormatTimeSpan(sum)}</td>");
             writer.WriteLine($"    </tr>");
             writer.WriteLine($"  </table>");
 
@@ -81,7 +80,7 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
                     {
                         sums[date] += Details[date][cat];
 
-                        writer.WriteLine($"      <td align='center'>{Details[date][cat].ToReportString()}</td>");
+                        writer.WriteLine($"      <td align='center'>{FormatTimeSpan(Details[date][cat])}</td>");
                     }
                     else
                     {
@@ -97,7 +96,7 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
 
             for (var date = Begin; date <= End; date = date.AddDays(1))
             {
-                writer.WriteLine($"      <td align='center' style='border-top:solid 2px #060'>{sums[date].ToReportString()}</td>");
+                writer.WriteLine($"      <td align='center' style='border-top:solid 2px #060'>{FormatTimeSpan(sums[date])}</td>");
             }
 
             writer.WriteLine($"    </tr>");
