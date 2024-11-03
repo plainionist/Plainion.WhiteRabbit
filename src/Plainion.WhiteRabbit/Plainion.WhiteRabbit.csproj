@@ -14,6 +14,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\play.png" />
+    <None Remove="Resources\Properties.bmp" />
+    <None Remove="Resources\properties.png" />
+    <None Remove="Resources\stop.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\play.png" />
+    <EmbeddedResource Include="Resources\properties.png" />
+    <EmbeddedResource Include="Resources\stop.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>

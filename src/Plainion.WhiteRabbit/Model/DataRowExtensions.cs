@@ -1,11 +1,14 @@
 using System;
+using System.Data;
 
-namespace Plainion.WhiteRabbit
+namespace Plainion.WhiteRabbit.Model
 {
-    public static class ObjectExtensions
+    public static class DataRowExtensions
     {
-        public static bool IsEmpty(this object value)
+        public static bool IsEmpty(this DataRow row, string column)
         {
+            var value = row[column];
+
             if (value == null || value == DBNull.Value)
             {
                 return true;

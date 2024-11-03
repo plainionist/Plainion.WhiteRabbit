@@ -20,17 +20,17 @@ namespace Plainion.WhiteRabbit.Model
                 return entry;
             }
 
-            if (!row[ColumnNames.BEGIN].IsEmpty())
+            if (!row.IsEmpty(ColumnNames.BEGIN))
             {
                 entry.Begin = DateTime.Parse((string)row[ColumnNames.BEGIN]);
             }
 
-            if (!row[ColumnNames.END].IsEmpty())
+            if (!row.IsEmpty(ColumnNames.END))
             {
                 entry.End = DateTime.Parse((string)row[ColumnNames.END]);
             }
 
-            if (row.Table.Columns.Contains(ColumnNames.COMMENT) && !row[ColumnNames.COMMENT].IsEmpty())
+            if (row.Table.Columns.Contains(ColumnNames.COMMENT) && !row.IsEmpty(ColumnNames.COMMENT))
             {
                 entry.Comment = (string)row[ColumnNames.COMMENT];
             }

@@ -14,10 +14,19 @@ namespace Plainion.WhiteRabbit.Presentation
         {
             myChannel = channel;
 
-            myElapsedTimer = new Timer();
-            myElapsedTimer.Enabled = false;
-            myElapsedTimer.Interval = 1000;
-            myElapsedTimer.Tick += myElapsedTimer_OnTick;
+            myElapsedTimer = new Timer
+            {
+                Enabled = false,
+                Interval = 1000
+            };
+            myElapsedTimer.Tick += OnTick;
+        }
+
+        private void OnTick(object sender, EventArgs e)
+        {
+            ++myElapsedSeconds;
+
+            myChannel.OnTimeElapsedChanged(Elapsed);
         }
 
         public DateTime StartTime => myStartTime;
@@ -44,13 +53,6 @@ namespace Plainion.WhiteRabbit.Presentation
         public void Stop()
         {
             myElapsedTimer.Enabled = false;
-        }
-
-        private void myElapsedTimer_OnTick(object sender, EventArgs e)
-        {
-            ++myElapsedSeconds;
-
-            myChannel.OnTimeElapsedChanged(Elapsed);
         }
     }
 }

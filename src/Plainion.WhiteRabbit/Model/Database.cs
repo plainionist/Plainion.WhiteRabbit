@@ -99,8 +99,7 @@ namespace Plainion.WhiteRabbit.Model
 
             foreach (DataRow row in table.Rows)
             {
-                if (!row[ColumnNames.BEGIN].IsEmpty() &&
-                    !row[ColumnNames.END].IsEmpty())
+                if (!row.IsEmpty(ColumnNames.BEGIN) && !row.IsEmpty(ColumnNames.END))
                 {
                     DateTime begin;
                     string beginString = (string)row[ColumnNames.BEGIN];

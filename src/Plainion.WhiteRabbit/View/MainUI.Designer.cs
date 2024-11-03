@@ -1,24 +1,29 @@
+using System;
+using System.Drawing;
+
 namespace Plainion.WhiteRabbit
 {
     partial class MainUI
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
-
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose( bool disposing )
-        {
-            if ( disposing && (components != null) )
-            {
-                components.Dispose();
-            }
-            base.Dispose( disposing );
-        }
+        private System.Windows.Forms.DataGridView myTableView;
+        private System.Windows.Forms.DateTimePicker myDateTime;
+        private System.Windows.Forms.ContextMenuStrip myPreferencesMenu;
+        private System.Windows.Forms.ToolStripMenuItem selectDatabaseToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip myTableContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem myTableContextMenu_DeleteSelectedRow;
+        private System.Windows.Forms.Button myRecordInitBtn;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.NotifyIcon myNotifyIcon;
+        private InstantUpdate.Controls.SplitButton mySplitbutton;
+        private System.Windows.Forms.ToolTip myToolTip;
+        private System.Windows.Forms.ToolStripMenuItem dayReportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem weekReportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem monthReportToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn myBeginCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn myEndCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn myDurationCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn myCommentCol;
+        private System.ComponentModel.IContainer myComponents;
 
         /// <summary>
         /// Required method for Designer support - do not modify
@@ -26,7 +31,7 @@ namespace Plainion.WhiteRabbit
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.myComponents = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -36,18 +41,18 @@ namespace Plainion.WhiteRabbit
             this.myEndCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.myDurationCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.myCommentCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.myTableContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.myTableContextMenu = new System.Windows.Forms.ContextMenuStrip(this.myComponents);
             this.myTableContextMenu_DeleteSelectedRow = new System.Windows.Forms.ToolStripMenuItem();
             this.myDateTime = new System.Windows.Forms.DateTimePicker();
-            this.myPreferencesMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.myPreferencesMenu = new System.Windows.Forms.ContextMenuStrip(this.myComponents);
             this.selectDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.dayReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.weekReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.monthReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.myRecordInitBtn = new System.Windows.Forms.Button();
-            this.myNotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.myToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.myNotifyIcon = new System.Windows.Forms.NotifyIcon(this.myComponents);
+            this.myToolTip = new System.Windows.Forms.ToolTip(this.myComponents);
             this.mySplitbutton = new InstantUpdate.Controls.SplitButton();
             ((System.ComponentModel.ISupportInitialize)(this.myTableView)).BeginInit();
             this.myTableContextMenu.SuspendLayout();
@@ -180,7 +185,7 @@ namespace Plainion.WhiteRabbit
             this.myRecordInitBtn.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.myRecordInitBtn.FlatAppearance.BorderSize = 0;
             this.myRecordInitBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.myRecordInitBtn.Image = ((System.Drawing.Image)(resources.GetObject("myRecordInitBtn.Image")));
+            this.myRecordInitBtn.Image = GetImage("play");
             this.myRecordInitBtn.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.myRecordInitBtn.Location = new System.Drawing.Point(419, 3);
             this.myRecordInitBtn.Name = "myRecordInitBtn";
@@ -202,7 +207,7 @@ namespace Plainion.WhiteRabbit
             this.mySplitbutton.ContextMenuStrip = this.myPreferencesMenu;
             this.mySplitbutton.FlatAppearance.BorderSize = 0;
             this.mySplitbutton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.mySplitbutton.Image = ((System.Drawing.Image)(resources.GetObject("mySplitbutton.Image")));
+            this.mySplitbutton.Image = GetImage("properties");
             this.mySplitbutton.Location = new System.Drawing.Point(465, 3);
             this.mySplitbutton.Name = "mySplitbutton";
             this.mySplitbutton.Size = new System.Drawing.Size(46, 23);
@@ -232,24 +237,28 @@ namespace Plainion.WhiteRabbit
 
         }
 
-        private System.Windows.Forms.DataGridView myTableView;
-        private System.Windows.Forms.DateTimePicker myDateTime;
-        private System.Windows.Forms.ContextMenuStrip myPreferencesMenu;
-        private System.Windows.Forms.ToolStripMenuItem selectDatabaseToolStripMenuItem;
-        private System.Windows.Forms.ContextMenuStrip myTableContextMenu;
-        private System.Windows.Forms.ToolStripMenuItem myTableContextMenu_DeleteSelectedRow;
-        private System.Windows.Forms.Button myRecordInitBtn;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.NotifyIcon myNotifyIcon;
-        private InstantUpdate.Controls.SplitButton mySplitbutton;
-        private System.Windows.Forms.ToolTip myToolTip;
-        private System.Windows.Forms.ToolStripMenuItem dayReportToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem weekReportToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem monthReportToolStripMenuItem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn myBeginCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn myEndCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn myDurationCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn myCommentCol;
+        private Image GetImage(string name)
+        {
+            using (var stream = GetType().Assembly.GetManifestResourceStream($"Plainion.WhiteRabbit.Resources.{name}.png"))
+            {
+                if (stream == null)
+                {
+                    throw new Exception($"Resource '{name}' not found");
+                }
+
+                var image = Image.FromStream(stream);
+                return new Bitmap(image, new Size(17, 17));
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (myComponents != null))
+            {
+                myComponents.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }
 

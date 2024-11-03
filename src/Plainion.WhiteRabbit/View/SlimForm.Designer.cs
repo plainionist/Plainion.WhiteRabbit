@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Plainion.WhiteRabbit.View
@@ -39,7 +40,7 @@ namespace Plainion.WhiteRabbit.View
             this.myTimeElapsed.Text = "00:00:00";
 
             this.myStopRecordBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.myStopRecordBtn.Image = ((System.Drawing.Image)(resources.GetObject("myStopRecordBtn.Image")));
+            this.myStopRecordBtn.Image = GetImage("stop");
             this.myStopRecordBtn.Location = new System.Drawing.Point(3, 3);
             this.myStopRecordBtn.Name = "myStopRecordBtn";
             this.myStopRecordBtn.Size = new System.Drawing.Size(23, 23);
@@ -65,6 +66,20 @@ namespace Plainion.WhiteRabbit.View
             this.myPanel.ResumeLayout(false);
             this.myPanel.PerformLayout();
             this.ResumeLayout(false);
+        }
+
+        private Image GetImage(string name)
+        {
+            using (var stream = GetType().Assembly.GetManifestResourceStream($"Plainion.WhiteRabbit.Resources.{name}.png"))
+            {
+                if (stream == null)
+                {
+                    throw new Exception($"Resource '{name}' not found");
+                }
+
+                var image = Image.FromStream(stream);
+                return new Bitmap(image, new Size(17, 17));
+            }
         }
     }
 }

@@ -114,13 +114,13 @@ namespace Plainion.WhiteRabbit.Presentation
                 dr = CurrentDayData.Rows[CurrentDayData.Rows.Count - 1];
             }
 
-            if (dr != null && dr[ColumnNames.END].IsEmpty())
+            if (dr != null && dr.IsEmpty(ColumnNames.END))
             {
                 dr[ColumnNames.END] = myRecorder.StopTime.ToShortTimeString();
 
                 dr[ColumnNames.COMMENT] = comment;
 
-                if (dr[ColumnNames.BEGIN].IsEmpty())
+                if (dr.IsEmpty(ColumnNames.BEGIN))
                 {
                     dr[ColumnNames.BEGIN] = myRecorder.StartTime.ToShortTimeString();
                 }
