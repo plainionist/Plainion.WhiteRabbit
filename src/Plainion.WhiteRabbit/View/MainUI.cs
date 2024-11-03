@@ -45,14 +45,10 @@ namespace Plainion.WhiteRabbit
             mySplitbutton.ShowSplit = true;
         }
 
-        #region Channel API
-
         public Channel Channel
         {
             get { return myChannel; }
         }
-
-        #endregion
 
         private void selectDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
         {

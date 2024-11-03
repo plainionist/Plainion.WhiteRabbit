@@ -20,8 +20,6 @@ namespace Plainion.WhiteRabbit
             base.Dispose( disposing );
         }
 
-        #region Windows Form Designer generated code
-
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
@@ -44,8 +42,6 @@ namespace Plainion.WhiteRabbit
             this.myPreferencesMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.selectDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.myPreferencesMenu_DeleteSelectedRow = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.dayReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.weekReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.monthReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -139,8 +135,6 @@ namespace Plainion.WhiteRabbit
             this.myPreferencesMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.selectDatabaseToolStripMenuItem,
             this.toolStripSeparator2,
-            this.myPreferencesMenu_DeleteSelectedRow,
-            this.toolStripSeparator3,
             this.dayReportToolStripMenuItem,
             this.weekReportToolStripMenuItem,
             this.monthReportToolStripMenuItem});
@@ -158,18 +152,6 @@ namespace Plainion.WhiteRabbit
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(173, 6);
-            // 
-            // myPreferencesMenu_DeleteSelectedRow
-            // 
-            this.myPreferencesMenu_DeleteSelectedRow.Name = "myPreferencesMenu_DeleteSelectedRow";
-            this.myPreferencesMenu_DeleteSelectedRow.Size = new System.Drawing.Size(176, 22);
-            this.myPreferencesMenu_DeleteSelectedRow.Text = "Delete selected row";
-            this.myPreferencesMenu_DeleteSelectedRow.Click += new System.EventHandler(this.deleteSelectedRowMenuItem_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(173, 6);
             // 
             // dayReportToolStripMenuItem
             // 
@@ -250,13 +232,10 @@ namespace Plainion.WhiteRabbit
 
         }
 
-        #endregion
-
         private System.Windows.Forms.DataGridView myTableView;
         private System.Windows.Forms.DateTimePicker myDateTime;
         private System.Windows.Forms.ContextMenuStrip myPreferencesMenu;
         private System.Windows.Forms.ToolStripMenuItem selectDatabaseToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem myPreferencesMenu_DeleteSelectedRow;
         private System.Windows.Forms.ContextMenuStrip myTableContextMenu;
         private System.Windows.Forms.ToolStripMenuItem myTableContextMenu_DeleteSelectedRow;
         private System.Windows.Forms.Button myRecordInitBtn;
@@ -264,7 +243,6 @@ namespace Plainion.WhiteRabbit
         private System.Windows.Forms.NotifyIcon myNotifyIcon;
         private InstantUpdate.Controls.SplitButton mySplitbutton;
         private System.Windows.Forms.ToolTip myToolTip;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem dayReportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem weekReportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem monthReportToolStripMenuItem;
