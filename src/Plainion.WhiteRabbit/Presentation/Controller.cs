@@ -16,7 +16,7 @@ namespace Plainion.WhiteRabbit.Presentation
 
         public Controller(Type initialView)
         {
-            if (Settings.Default.DBStore.IsNullOrTrimmedEmpty())
+            if (String.IsNullOrWhiteSpace(Settings.Default.DBStore))
             {
                 Settings.Default.DBStore = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "WhiteRabbit");
                 Settings.Default.Save();
