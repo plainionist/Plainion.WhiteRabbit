@@ -38,8 +38,11 @@ namespace Plainion.WhiteRabbit.View
             this.myTimeElapsed.Text = "00:00:00";
 
             this.myStopRecordBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.myStopRecordBtn.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.myStopRecordBtn.FlatAppearance.BorderSize = 0;
             this.myStopRecordBtn.Image = GetImage("stop");
-            this.myStopRecordBtn.Location = new System.Drawing.Point(3, 3);
+            this.myStopRecordBtn.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.myStopRecordBtn.Location = new System.Drawing.Point(3, 5);
             this.myStopRecordBtn.Name = "myStopRecordBtn";
             this.myStopRecordBtn.Size = new System.Drawing.Size(23, 23);
             this.myStopRecordBtn.TabIndex = 18;
@@ -76,7 +79,7 @@ namespace Plainion.WhiteRabbit.View
                 }
 
                 var image = Image.FromStream(stream);
-                return new Bitmap(image, new Size(17, 17));
+                return new Bitmap(image, new Size(15, 15));
             }
         }
     }

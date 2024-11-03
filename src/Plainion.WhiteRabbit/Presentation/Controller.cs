@@ -4,19 +4,19 @@ using System.Data;
 using System.IO;
 using System.Windows.Forms;
 using Plainion.WhiteRabbit.Model;
-using Plainion.WhiteRabbit.Presentation.Reports;
 using Plainion.WhiteRabbit.Properties;
+using Plainion.WhiteRabbit.Reports;
 using Plainion.WhiteRabbit.View;
 
 namespace Plainion.WhiteRabbit.Presentation
 {
     public class Controller
     {
-        private Recorder myRecorder = null;
+        private Recorder myRecorder;
 
         public Controller(Type initialView)
         {
-            if (String.IsNullOrWhiteSpace(Settings.Default.DBStore))
+            if (string.IsNullOrWhiteSpace(Settings.Default.DBStore))
             {
                 Settings.Default.DBStore = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "WhiteRabbit");
                 Settings.Default.Save();
@@ -27,6 +27,7 @@ namespace Plainion.WhiteRabbit.Presentation
             MainView = Activator.CreateInstance(initialView, this) as IView;
         }
 
+        public Database Database { get; }
         public IView MainView { get; }
         public IView TimerView { get; private set; }
         public DataTable CurrentDayData { get; private set; }
@@ -46,7 +47,7 @@ namespace Plainion.WhiteRabbit.Presentation
             Database.StoreTable(CurrentDayData);
         }
 
-        public DataTable GetTableByDay(DateTime day)
+        private DataTable GetTableByDay(DateTime day)
         {
             var table = Database.LoadTable(day);
             if (table == null)
@@ -142,13 +143,9 @@ namespace Plainion.WhiteRabbit.Presentation
             myRecorder = null;
         }
 
-        /// <summary>
-        /// Generates the report for the given day and returns the
-        /// URL to the generated report.
-        /// </summary>
         public string GenerateDayReport(DateTime day)
         {
-            string file = Path.GetTempFileName();
+            var file = Path.Combine(Path.GetTempPath(),"WhiteRabbit.Report.html");
 
             var data = GetDetails(day, out bool isComplete);
 
@@ -166,10 +163,6 @@ namespace Plainion.WhiteRabbit.Presentation
             return file;
         }
 
-        /// <summary>
-        /// Generates the report for the week specified by the day and returns the
-        /// URL to the generated report.
-        /// </summary>
         public string GenerateWeekReport(DateTime day)
         {
             var begin = GetBeginOfWeek(day);
@@ -206,7 +199,7 @@ namespace Plainion.WhiteRabbit.Presentation
 
         public string GenerateRangeReport(DateTime begin, DateTime end)
         {
-            string file = Path.GetTempFileName();
+            var file = Path.Combine(Path.GetTempPath(), "WhiteRabbit.Report.html");
 
             var overview = new Dictionary<string, TimeSpan>(StringComparer.OrdinalIgnoreCase)
             {
@@ -250,8 +243,6 @@ namespace Plainion.WhiteRabbit.Presentation
             return file;
         }
 
-        public Database Database { get;  }
-
         private Dictionary<string, TimeSpan> GetDetails(DateTime day, out bool isComplete)
         {
             var data = new Dictionary<string, TimeSpan>(StringComparer.OrdinalIgnoreCase)
@@ -261,7 +252,7 @@ namespace Plainion.WhiteRabbit.Presentation
 
             isComplete = true;
 
-            DataTable table = Database.LoadTable(day);
+            var table = Database.LoadTable(day);
             foreach (DataRow row in table.Rows)
             {
                 var entry = DayEntry.Parse(row);

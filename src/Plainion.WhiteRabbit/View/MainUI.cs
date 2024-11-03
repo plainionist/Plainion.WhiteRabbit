@@ -171,7 +171,6 @@ namespace Plainion.WhiteRabbit
             }
         }
 
-
         private bool IsValidCell(int col, int row)
         {
             return ((-1 != col && -1 != row) &&

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Plainion.WhiteRabbit.Presentation.Reports
+namespace Plainion.WhiteRabbit.Reports
 {
     public partial class RangeReport : ReportBase
     {

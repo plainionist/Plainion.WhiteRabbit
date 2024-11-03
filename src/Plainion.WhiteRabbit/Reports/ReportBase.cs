@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace Plainion.WhiteRabbit.Presentation.Reports
+namespace Plainion.WhiteRabbit.Reports
 {
     public class ReportBase
     {

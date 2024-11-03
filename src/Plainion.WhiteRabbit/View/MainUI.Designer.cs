@@ -183,12 +183,11 @@ namespace Plainion.WhiteRabbit
             this.myRecordInitBtn.FlatAppearance.BorderSize = 0;
             this.myRecordInitBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.myRecordInitBtn.Image = GetImage("play");
-            this.myRecordInitBtn.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.myRecordInitBtn.ImageAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.myRecordInitBtn.Location = new System.Drawing.Point(419, 3);
             this.myRecordInitBtn.Name = "myRecordInitBtn";
             this.myRecordInitBtn.Size = new System.Drawing.Size(23, 23);
             this.myRecordInitBtn.TabIndex = 14;
-            this.myToolTip.SetToolTip(this.myRecordInitBtn, "Start");
             this.myRecordInitBtn.UseVisualStyleBackColor = true;
             this.myRecordInitBtn.Click += new System.EventHandler(this.OnRecordClicked);
             // 
@@ -204,7 +203,6 @@ namespace Plainion.WhiteRabbit
             this.mySplitbutton.Size = new System.Drawing.Size(46, 23);
             this.mySplitbutton.SplitMenuStrip = this.myPreferencesMenu;
             this.mySplitbutton.TabIndex = 16;
-            this.myToolTip.SetToolTip(this.mySplitbutton, "Properties");
             this.mySplitbutton.UseVisualStyleBackColor = true;
             // 
             // MainUI

@@ -2,9 +2,9 @@
 {
     internal class ColumnNames
     {
-        public static readonly string BEGIN = "Begin";
-        public static readonly string END = "End";
-        public static readonly string DURATION = "Duration";
-        public static readonly string COMMENT = "Task";
+        public const string BEGIN = "Begin";
+        public const string END = "End";
+        public const string DURATION = "Duration";
+        public const string COMMENT = "Task";
     }
 }
