@@ -36,9 +36,9 @@ namespace Plainion.WhiteRabbit
         private const string COMMENT_COLUMN_NAME = "myCommentCol";
 
         private readonly BindingSource myBindingSource;
-        private readonly Controller myController;
+        private readonly IController myController;
 
-        public MainUI(Controller controller)
+        internal MainUI(IController controller)
         {
             InitializeComponent();
 
@@ -91,8 +91,7 @@ namespace Plainion.WhiteRabbit
         private void OnCellEdit(object sender, DataGridViewCellEventArgs e)
         {
             myBindingSource.EndEdit();
-
-            myController.Database.StoreTable(myController.CurrentDayData);
+            myController.TableCellChanged();
         }
 
         private void OnDateTimeChanged(object sender, EventArgs e)

@@ -9,9 +9,11 @@ using Plainion.WhiteRabbit.View;
 
 namespace Plainion.WhiteRabbit.Presentation
 {
-    public class Controller
+    public class Controller : IController
     {
         private Recorder myRecorder;
+        private readonly Database myDatabase;
+        private IView myTimerView;
 
         public Controller()
         {
@@ -21,16 +23,14 @@ namespace Plainion.WhiteRabbit.Presentation
                 Settings.Default.Save();
             }
 
-            Database = new Database(Settings.Default.DBStore);
+            myDatabase = new Database(Settings.Default.DBStore);
 
             MainView = ViewFactory.CreateMainView(this);
         }
 
-        public Database Database { get; }
-        public IView MainView { get; }
-        public IView TimerView { get; private set; }
         public DataTable CurrentDayData { get; private set; }
         public DateTime CurrentDay { get; private set; }
+        public IView MainView { get; private set; }
 
         public void ChangeDay(DateTime day)
         {
@@ -43,15 +43,20 @@ namespace Plainion.WhiteRabbit.Presentation
             CurrentDayData.Rows.RemoveAt(idx);
             CurrentDayData.AcceptChanges();
 
-            Database.StoreTable(CurrentDayData);
+            myDatabase.StoreTable(CurrentDayData);
+        }
+
+        public void TableCellChanged()
+        {
+            myDatabase.StoreTable(CurrentDayData);
         }
 
         private DataTable GetTableByDay(DateTime day)
         {
-            var table = Database.LoadTable(day);
+            var table = myDatabase.LoadTable(day);
             if (table == null)
             {
-                table = Database.CreateTable(day);
+                table = myDatabase.CreateTable(day);
             }
 
             return table;
@@ -73,15 +78,15 @@ namespace Plainion.WhiteRabbit.Presentation
 
             MainView.Hide();
 
-            if (TimerView == null)
+            if (myTimerView == null)
             {
-                TimerView = ViewFactory.CreateTimerView(this);
+                myTimerView = ViewFactory.CreateTimerView(this);
             }
 
-            TimerView.Show();
-            (TimerView as SlimForm).Start(entry);
+            myTimerView.Show();
+            (myTimerView as SlimForm).Start(entry);
 
-            myRecorder = new Recorder(TimerView.Channel);
+            myRecorder = new Recorder(myTimerView.Channel);
 
             if (entry.End == null)
             {
@@ -102,7 +107,7 @@ namespace Plainion.WhiteRabbit.Presentation
 
         public void StopTimeMeasurement(string comment)
         {
-            TimerView.Hide();
+            myTimerView.Hide();
             MainView.Show();
 
             myRecorder.Stop();
@@ -138,7 +143,7 @@ namespace Plainion.WhiteRabbit.Presentation
                 dr[ColumnNames.COMMENT] = comment;
             }
 
-            Database.StoreTable(CurrentDayData);
+            myDatabase.StoreTable(CurrentDayData);
 
             myRecorder = null;
         }
@@ -252,7 +257,7 @@ namespace Plainion.WhiteRabbit.Presentation
 
             isComplete = true;
 
-            var table = Database.LoadTable(day);
+            var table = myDatabase.LoadTable(day);
             foreach (DataRow row in table.Rows)
             {
                 var entry = DayEntry.Parse(row);

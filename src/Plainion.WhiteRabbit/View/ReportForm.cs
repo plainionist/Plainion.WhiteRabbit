@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using Plainion.WhiteRabbit.Presentation;
 
 namespace Plainion.WhiteRabbit.View
 {
@@ -16,7 +15,7 @@ namespace Plainion.WhiteRabbit.View
         private Button myOkBtn;
         private WebBrowser myBrowser;
 
-        public ReportForm(Controller controller, ReportScope scope)
+        internal ReportForm(IController controller, ReportScope scope)
         {
             InitializeComponent();
 

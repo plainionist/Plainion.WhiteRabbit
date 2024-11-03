@@ -8,7 +8,7 @@ using Plainion.WhiteRabbit.Presentation;
 
 namespace Plainion.WhiteRabbit.View
 {
-    public partial class SlimForm : Form, IView
+    public  class SlimForm : Form, IView
     {
         private Panel myPanel;
         private Label myTimeElapsed;
@@ -23,9 +23,9 @@ namespace Plainion.WhiteRabbit.View
         [DllImport("user32.dll")]
         public static extern bool ReleaseCapture();
 
-        private Controller myController;
+        private IController myController;
 
-        public SlimForm(Controller controller)
+        internal SlimForm(IController controller)
         {
             InitializeComponent();
 
