@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plainion.WhiteRabbit", "src\Plainion.WhiteRabbit\Plainion.WhiteRabbit.csproj", "{17326B5F-B907-479D-BDDA-8D2736C7328D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{17326B5F-B907-479D-BDDA-8D2736C7328D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17326B5F-B907-479D-BDDA-8D2736C7328D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17326B5F-B907-479D-BDDA-8D2736C7328D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17326B5F-B907-479D-BDDA-8D2736C7328D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {05557C8A-C32D-416E-9932-24E5E3C4AD28}
+	EndGlobalSection
+EndGlobal
