@@ -13,8 +13,6 @@ namespace Plainion.WhiteRabbit.View
 
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SlimForm));
-
             this.myPanel = new System.Windows.Forms.Panel();
             this.myTimeElapsed = new System.Windows.Forms.Label();
             this.myStopRecordBtn = new System.Windows.Forms.Button();

@@ -14,6 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Logo.ico" />
     <None Remove="Resources\play.png" />
     <None Remove="Resources\Properties.bmp" />
     <None Remove="Resources\properties.png" />
@@ -21,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Logo.ico" />
     <EmbeddedResource Include="Resources\play.png" />
     <EmbeddedResource Include="Resources\properties.png" />
     <EmbeddedResource Include="Resources\stop.png" />

@@ -13,7 +13,6 @@ namespace Plainion.WhiteRabbit
         private System.Windows.Forms.ToolStripMenuItem myTableContextMenu_DeleteSelectedRow;
         private System.Windows.Forms.Button myRecordInitBtn;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.NotifyIcon myNotifyIcon;
         private InstantUpdate.Controls.SplitButton mySplitbutton;
         private System.Windows.Forms.ToolTip myToolTip;
         private System.Windows.Forms.ToolStripMenuItem dayReportToolStripMenuItem;
@@ -35,7 +34,6 @@ namespace Plainion.WhiteRabbit
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainUI));
             this.myTableView = new System.Windows.Forms.DataGridView();
             this.myBeginCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.myEndCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -51,7 +49,6 @@ namespace Plainion.WhiteRabbit
             this.weekReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.monthReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.myRecordInitBtn = new System.Windows.Forms.Button();
-            this.myNotifyIcon = new System.Windows.Forms.NotifyIcon(this.myComponents);
             this.myToolTip = new System.Windows.Forms.ToolTip(this.myComponents);
             this.mySplitbutton = new InstantUpdate.Controls.SplitButton();
             ((System.ComponentModel.ISupportInitialize)(this.myTableView)).BeginInit();
@@ -73,11 +70,11 @@ namespace Plainion.WhiteRabbit
             this.myTableView.RowHeadersVisible = false;
             this.myTableView.Size = new System.Drawing.Size(511, 320);
             this.myTableView.TabIndex = 3;
-            this.myTableView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.myTableView_CellEndEdit);
-            this.myTableView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.myTableView_CellValidating);
-            this.myTableView.KeyUp += new System.Windows.Forms.KeyEventHandler(this.myTableView_KeyUp);
-            this.myTableView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.myTableView_MouseDown);
-            this.myTableView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.myTableView_MouseUp);
+            this.myTableView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.OnCellEdit);
+            this.myTableView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.OnCellValidating);
+            this.myTableView.KeyUp += new System.Windows.Forms.KeyEventHandler(this.OnTableKeyUp);
+            this.myTableView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnTableMouseDown);
+            this.myTableView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnTableMouseUp);
             // 
             // myBeginCol
             // 
@@ -125,7 +122,7 @@ namespace Plainion.WhiteRabbit
             this.myTableContextMenu_DeleteSelectedRow.Name = "myTableContextMenu_DeleteSelectedRow";
             this.myTableContextMenu_DeleteSelectedRow.Size = new System.Drawing.Size(176, 22);
             this.myTableContextMenu_DeleteSelectedRow.Text = "Delete selected row";
-            this.myTableContextMenu_DeleteSelectedRow.Click += new System.EventHandler(this.deleteSelectedRowMenuItem_Click);
+            this.myTableContextMenu_DeleteSelectedRow.Click += new System.EventHandler(this.OnDeleteCurrentRow);
             // 
             // myDateTime
             // 
@@ -133,7 +130,7 @@ namespace Plainion.WhiteRabbit
             this.myDateTime.Name = "myDateTime";
             this.myDateTime.Size = new System.Drawing.Size(225, 20);
             this.myDateTime.TabIndex = 4;
-            this.myDateTime.ValueChanged += new System.EventHandler(this.myDateTime_ValueChanged);
+            this.myDateTime.ValueChanged += new System.EventHandler(this.OnDateTimeChanged);
             // 
             // myPreferencesMenu
             // 
@@ -151,7 +148,7 @@ namespace Plainion.WhiteRabbit
             this.selectDatabaseToolStripMenuItem.Name = "selectDatabaseToolStripMenuItem";
             this.selectDatabaseToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
             this.selectDatabaseToolStripMenuItem.Text = "Select database ...";
-            this.selectDatabaseToolStripMenuItem.Click += new System.EventHandler(this.selectDatabaseToolStripMenuItem_Click);
+            this.selectDatabaseToolStripMenuItem.Click += new System.EventHandler(this.OnSelectDatabase);
             // 
             // toolStripSeparator2
             // 
@@ -193,13 +190,7 @@ namespace Plainion.WhiteRabbit
             this.myRecordInitBtn.TabIndex = 14;
             this.myToolTip.SetToolTip(this.myRecordInitBtn, "Start");
             this.myRecordInitBtn.UseVisualStyleBackColor = true;
-            this.myRecordInitBtn.Click += new System.EventHandler(this.myRecordInitBtn_Click);
-            // 
-            // myNotifyIcon
-            // 
-            this.myNotifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("myNotifyIcon.Icon")));
-            this.myNotifyIcon.Text = "White Rabbit";
-            this.myNotifyIcon.DoubleClick += new System.EventHandler(this.myNotifyIcon_DoubleClick);
+            this.myRecordInitBtn.Click += new System.EventHandler(this.OnRecordClicked);
             // 
             // mySplitbutton
             // 
@@ -226,7 +217,7 @@ namespace Plainion.WhiteRabbit
             this.Controls.Add(this.mySplitbutton);
             this.Controls.Add(this.myRecordInitBtn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = GetLogo();
             this.MaximizeBox = false;
             this.Name = "MainUI";
             ((System.ComponentModel.ISupportInitialize)(this.myTableView)).EndInit();
@@ -248,6 +239,14 @@ namespace Plainion.WhiteRabbit
 
                 var image = Image.FromStream(stream);
                 return new Bitmap(image, new Size(17, 17));
+            }
+        }
+
+        private Icon GetLogo()
+        {
+            using (var stream = GetType().Assembly.GetManifestResourceStream($"Plainion.WhiteRabbit.Logo.ico"))
+            {
+                return new Icon(stream);
             }
         }
 

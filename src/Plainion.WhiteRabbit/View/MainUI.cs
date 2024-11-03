@@ -51,13 +51,14 @@ namespace Plainion.WhiteRabbit
             get { return myChannel; }
         }
 
-        private void selectDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OnSelectDatabase(object sender, EventArgs e)
         {
-            FolderBrowserDialog dlg = new FolderBrowserDialog();
-
-            dlg.SelectedPath = Settings.Default.DBStore;
-            dlg.ShowNewFolderButton = true;
-            dlg.Description = "Select database store";
+            var dlg = new FolderBrowserDialog
+            {
+                SelectedPath = Settings.Default.DBStore,
+                ShowNewFolderButton = true,
+                Description = "Select database store"
+            };
 
             if (dlg.ShowDialog(this) != DialogResult.OK)
             {
@@ -71,20 +72,20 @@ namespace Plainion.WhiteRabbit
             }
         }
 
-        private void myTableView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        private void OnCellEdit(object sender, DataGridViewCellEventArgs e)
         {
             myBindingSource.EndEdit();
 
             myController.Database.StoreTable(myController.CurrentDayData);
         }
 
-        private void myDateTime_ValueChanged(object sender, EventArgs e)
+        private void OnDateTimeChanged(object sender, EventArgs e)
         {
             myController.ChangeDay(myDateTime.Value);
             myBindingSource.DataSource = myController.CurrentDayData;
         }
 
-        private void myTableView_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        private void OnCellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
             if (e.ColumnIndex >= 0 && e.ColumnIndex < 3)
             {
@@ -114,17 +115,12 @@ namespace Plainion.WhiteRabbit
             }
         }
 
-        private void myRecordInitBtn_Click(object sender, EventArgs e)
-        {
-            myStartRecordBtn_Click(sender, e);
-        }
-
-        private void myStartRecordBtn_Click(object sender, EventArgs e)
+        private void OnRecordClicked(object sender, EventArgs e)
         {
             myController.StartTimeMeasurement();
         }
 
-        private void myTableView_KeyUp(object sender, KeyEventArgs e)
+        private void OnTableKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.C)
             {
@@ -142,20 +138,12 @@ namespace Plainion.WhiteRabbit
             }
         }
 
-        private void deleteSelectedRowMenuItem_Click(object sender, EventArgs e)
+        private void OnDeleteCurrentRow(object sender, EventArgs e)
         {
             myController.DeleteDayEntry(myTableView.CurrentRow.Index);
         }
 
-        private void myNotifyIcon_DoubleClick(object sender, EventArgs e)
-        {
-            Visible = true;
-            Activate();
-            WindowState = FormWindowState.Normal;
-            myNotifyIcon.Visible = false;
-        }
-
-        private void myTableView_MouseDown(object sender, MouseEventArgs e)
+        private void OnTableMouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
@@ -169,7 +157,7 @@ namespace Plainion.WhiteRabbit
             }
         }
 
-        private void myTableView_MouseUp(object sender, MouseEventArgs e)
+        private void OnTableMouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
@@ -195,10 +183,12 @@ namespace Plainion.WhiteRabbit
         {
             new ReportForm(myController, ReportScope.Day) { }.ShowDialog(this);
         }
+
         private void OnReportWeek(object sender, EventArgs e)
         {
             new ReportForm(myController, ReportScope.Week).ShowDialog(this);
         }
+        
         private void OnReportMonth(object sender, EventArgs e)
         {
             new ReportForm(myController, ReportScope.Month).ShowDialog(this);
