@@ -44,13 +44,7 @@ namespace Plainion.WhiteRabbit.View
             myCommentTxt.Text = entry.Comment;
         }
 
-        public Channel Channel
-        {
-            get
-            {
-                return myChannel;
-            }
-        }
+        public Channel Channel => myChannel;
 
         [SecuritySafeCritical]
         private void OnMouseDown(object sender, MouseEventArgs e)

@@ -4,9 +4,8 @@ namespace Plainion.WhiteRabbit.View
 {
     public interface IView
     {
-        Channel Channel
-        {
-            get;
-        }
+        Channel Channel { get; }
+        void Show();
+        void Hide();
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Windows.Forms;
 using Plainion.WhiteRabbit.Model;
 using Plainion.WhiteRabbit.Properties;
 using Plainion.WhiteRabbit.Reports;
@@ -24,7 +23,7 @@ namespace Plainion.WhiteRabbit.Presentation
 
             Database = new Database(Settings.Default.DBStore);
 
-            MainView = Activator.CreateInstance(initialView, this) as IView;
+            MainView = (IView)Activator.CreateInstance(initialView, this);
         }
 
         public Database Database { get; }
@@ -72,13 +71,14 @@ namespace Plainion.WhiteRabbit.Presentation
                 entry = new DayEntry();
             }
 
-            (MainView as Form).Hide();
+            MainView.Hide();
 
             if (TimerView == null)
             {
                 TimerView = new SlimForm(this);
             }
-            (TimerView as SlimForm).Show();
+
+            TimerView.Show();
             (TimerView as SlimForm).Start(entry);
 
             myRecorder = new Recorder(TimerView.Channel);
@@ -102,8 +102,8 @@ namespace Plainion.WhiteRabbit.Presentation
 
         public void StopTimeMeasurement(string comment)
         {
-            (TimerView as Form).Hide();
-            (MainView as Form).Show();
+            TimerView.Hide();
+            MainView.Show();
 
             myRecorder.Stop();
 
@@ -145,7 +145,7 @@ namespace Plainion.WhiteRabbit.Presentation
 
         public string GenerateDayReport(DateTime day)
         {
-            var file = Path.Combine(Path.GetTempPath(),"WhiteRabbit.Report.html");
+            var file = Path.Combine(Path.GetTempPath(), "WhiteRabbit.Report.html");
 
             var data = GetDetails(day, out bool isComplete);
 
