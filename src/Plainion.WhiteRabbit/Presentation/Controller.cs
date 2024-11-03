@@ -114,15 +114,15 @@ namespace Plainion.WhiteRabbit.Presentation
                 dr = CurrentDayData.Rows[CurrentDayData.Rows.Count - 1];
             }
 
-            if (dr != null && dr["End"].IsEmpty())
+            if (dr != null && dr[ColumnNames.END].IsEmpty())
             {
-                dr["End"] = myRecorder.StopTime.ToShortTimeString();
+                dr[ColumnNames.END] = myRecorder.StopTime.ToShortTimeString();
 
                 dr[ColumnNames.COMMENT] = comment;
 
-                if (dr["Begin"].IsEmpty())
+                if (dr[ColumnNames.BEGIN].IsEmpty())
                 {
-                    dr["Begin"] = myRecorder.StartTime.ToShortTimeString();
+                    dr[ColumnNames.BEGIN] = myRecorder.StartTime.ToShortTimeString();
                 }
             }
             else
@@ -132,8 +132,8 @@ namespace Plainion.WhiteRabbit.Presentation
                 CurrentDayData.Rows.Add(dr);
                 CurrentDayData.AcceptChanges();
 
-                dr["Begin"] = myRecorder.StartTime.ToShortTimeString();
-                dr["End"] = myRecorder.StopTime.ToShortTimeString();
+                dr[ColumnNames.BEGIN] = myRecorder.StartTime.ToShortTimeString();
+                dr[ColumnNames.END] = myRecorder.StopTime.ToShortTimeString();
                 dr[ColumnNames.COMMENT] = comment;
             }
 
@@ -172,9 +172,29 @@ namespace Plainion.WhiteRabbit.Presentation
         /// </summary>
         public string GenerateWeekReport(DateTime day)
         {
-            var begin = day.GetBeginOfWeek();
-            var end = day.GetEndOfWeek();
+            var begin = GetBeginOfWeek(day);
+            var end = GetEndOfWeek(day);
             return GenerateRangeReport(begin, end);
+        }
+
+        private DateTime GetBeginOfWeek(DateTime date)
+        {
+            while (date.DayOfWeek != DayOfWeek.Monday)
+            {
+                date = date.AddDays(-1);
+            }
+
+            return date;
+        }
+
+        private DateTime GetEndOfWeek(DateTime date)
+        {
+            while (date.DayOfWeek != DayOfWeek.Sunday)
+            {
+                date = date.AddDays(1);
+            }
+
+            return date;
         }
 
         public string GenerateMonthReport(DateTime day)

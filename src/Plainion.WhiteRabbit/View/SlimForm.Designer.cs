@@ -13,15 +13,14 @@ namespace Plainion.WhiteRabbit.View
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SlimForm));
+
             this.myPanel = new System.Windows.Forms.Panel();
             this.myTimeElapsed = new System.Windows.Forms.Label();
             this.myStopRecordBtn = new System.Windows.Forms.Button();
             this.myCommentTxt = new System.Windows.Forms.TextBox();
             this.myPanel.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // panel1
-            // 
+
             this.myPanel.Controls.Add(this.myTimeElapsed);
             this.myPanel.Controls.Add(this.myStopRecordBtn);
             this.myPanel.Controls.Add(this.myCommentTxt);
@@ -30,9 +29,7 @@ namespace Plainion.WhiteRabbit.View
             this.myPanel.Size = new System.Drawing.Size(223, 29);
             this.myPanel.TabIndex = 17;
             this.myPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
-            // 
-            // myTimeElapsed
-            // 
+
             this.myTimeElapsed.AutoSize = true;
             this.myTimeElapsed.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.myTimeElapsed.Location = new System.Drawing.Point(166, 8);
@@ -40,9 +37,7 @@ namespace Plainion.WhiteRabbit.View
             this.myTimeElapsed.Size = new System.Drawing.Size(51, 15);
             this.myTimeElapsed.TabIndex = 20;
             this.myTimeElapsed.Text = "00:00:00";
-            // 
-            // myStopRecordBtn
-            // 
+
             this.myStopRecordBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.myStopRecordBtn.Image = ((System.Drawing.Image)(resources.GetObject("myStopRecordBtn.Image")));
             this.myStopRecordBtn.Location = new System.Drawing.Point(3, 3);
@@ -51,16 +46,12 @@ namespace Plainion.WhiteRabbit.View
             this.myStopRecordBtn.TabIndex = 18;
             this.myStopRecordBtn.UseVisualStyleBackColor = true;
             this.myStopRecordBtn.Click += new System.EventHandler(this.OnStopButton);
-            // 
-            // myCommentTxt
-            // 
+
             this.myCommentTxt.Location = new System.Drawing.Point(32, 5);
             this.myCommentTxt.Name = "myCommentTxt";
             this.myCommentTxt.Size = new System.Drawing.Size(128, 20);
             this.myCommentTxt.TabIndex = 21;
-            // 
-            // SlimForm
-            // 
+
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(223, 29);
             this.Controls.Add(this.myPanel);
