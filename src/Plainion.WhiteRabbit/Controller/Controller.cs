@@ -13,7 +13,7 @@ namespace Plainion.WhiteRabbit.Presentation
     {
         private Recorder myRecorder;
 
-        public Controller(Type initialView)
+        public Controller()
         {
             if (string.IsNullOrWhiteSpace(Settings.Default.DBStore))
             {
@@ -23,7 +23,7 @@ namespace Plainion.WhiteRabbit.Presentation
 
             Database = new Database(Settings.Default.DBStore);
 
-            MainView = (IView)Activator.CreateInstance(initialView, this);
+            MainView = ViewFactory.CreateMainView(this);
         }
 
         public Database Database { get; }
@@ -62,7 +62,7 @@ namespace Plainion.WhiteRabbit.Presentation
             DayEntry entry = null;
             if (CurrentDayData.Rows.Count > 0)
             {
-                DataRow dr = CurrentDayData.Rows[CurrentDayData.Rows.Count - 1];
+                var dr = CurrentDayData.Rows[CurrentDayData.Rows.Count - 1];
 
                 entry = DayEntry.Parse(dr);
             }
@@ -75,7 +75,7 @@ namespace Plainion.WhiteRabbit.Presentation
 
             if (TimerView == null)
             {
-                TimerView = new SlimForm(this);
+                TimerView = ViewFactory.CreateTimerView(this);
             }
 
             TimerView.Show();

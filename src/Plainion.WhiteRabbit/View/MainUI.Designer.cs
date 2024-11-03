@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using Plainion.WhiteRabbit.View;
 
 namespace Plainion.WhiteRabbit
 {
@@ -13,7 +14,7 @@ namespace Plainion.WhiteRabbit
         private System.Windows.Forms.ToolStripMenuItem myTableContextMenu_DeleteSelectedRow;
         private System.Windows.Forms.Button myRecordInitBtn;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private InstantUpdate.Controls.SplitButton mySplitbutton;
+        private SplitButton mySplitbutton;
         private System.Windows.Forms.ToolTip myToolTip;
         private System.Windows.Forms.ToolStripMenuItem dayReportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem weekReportToolStripMenuItem;

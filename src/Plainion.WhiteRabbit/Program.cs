@@ -12,9 +12,9 @@ namespace Plainion.WhiteRabbit
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            var ctrl = new Controller(typeof(MainUI));
+            var ctrl = new Controller();
 
-            Application.Run(ctrl.MainView as Form);
+            Application.Run((Form)ctrl.MainView);
         }
     }
 }

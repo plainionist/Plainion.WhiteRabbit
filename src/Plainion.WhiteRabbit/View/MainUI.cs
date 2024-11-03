@@ -96,7 +96,6 @@ namespace Plainion.WhiteRabbit
                 {
                     value += "00";
                     cell.Value = value;
-                    //myTableView.InvalidateRow( e.RowIndex );
                     myTableView.RefreshEdit();
                 }
 
@@ -104,9 +103,6 @@ namespace Plainion.WhiteRabbit
                 if (!DateTime.TryParse(value, out result))
                 {
                     cell.Style.ForeColor = Color.Red;
-                    //DataGridViewAdvancedBorderStyle style = new DataGridViewAdvancedBorderStyle();
-                    //style.All = DataGridViewAdvancedCellBorderStyle.OutsetDouble;
-                    //cell.AdjustCellBorderStyle( style, style, false, false, false, false );
                 }
                 else
                 {
