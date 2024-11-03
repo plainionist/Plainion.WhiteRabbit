@@ -10,7 +10,7 @@
     <WarningLevel>4</WarningLevel>
     <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <ApplicationIcon>Picture1.ico</ApplicationIcon>
+    <ApplicationIcon>Logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

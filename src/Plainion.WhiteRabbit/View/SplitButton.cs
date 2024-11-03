@@ -330,21 +330,6 @@ namespace InstantUpdate.Controls
                     break;
             }
 
-            //// draw the button background as according to the current state.
-            //if (State != PushButtonState.Pressed && IsDefault && !Application.RenderWithVisualStyles)
-            //{
-            //    Rectangle backgroundBounds = bounds;
-            //    backgroundBounds.Inflate(-1, -1);
-            //    ButtonRenderer.DrawButton(g, backgroundBounds, State);
-
-            //    // button renderer doesnt draw the black frame when themes are off =(
-            //    g.DrawRectangle(SystemPens.WindowFrame, 0, 0, bounds.Width - 1, bounds.Height - 1);
-            //}
-            //else
-            //{
-            //    ButtonRenderer.DrawButton(g, bounds, State);
-            //}
-
             // calculate the current dropdown rectangle.
             dropDownRectangle = new Rectangle(bounds.Right - SplitSectionWidth, 0, SplitSectionWidth, bounds.Height);
 
@@ -506,11 +491,6 @@ namespace InstantUpdate.Controls
             return ret_size;
         }
 
-        #region Button Layout Calculations
-
-        //The following layout functions were taken from Mono's Windows.Forms 
-        //implementation, specifically "ThemeWin32Classic.cs", 
-        //then modified to fit the context of this splitButton
 
         private void CalculateButtonTextAndImageLayout(ref Rectangle content_rect, out Rectangle textRectangle, out Rectangle imageRectangle)
         {
@@ -769,9 +749,6 @@ namespace InstantUpdate.Controls
 
             return new Rectangle(x, y, Math.Min(inner.Width, outer.Width), Math.Min(inner.Height, outer.Height));
         }
-
-        #endregion Button Layout Calculations
-
 
         private void ShowContextMenuStrip()
         {
