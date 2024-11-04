@@ -6,8 +6,10 @@
   const name = ref('')
 
   async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    greetMsg.value = await invoke('greet', { name: name.value })
+    const response = await invoke('dotnet_request', {
+      request: JSON.stringify({ controller: 'home', action: 'login', data: { user: name.value, password: '<secret>' } })
+    })
+    greetMsg.value = JSON.parse(response).data
   }
 </script>
 

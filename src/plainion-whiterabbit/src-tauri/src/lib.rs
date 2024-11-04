@@ -1,14 +1,15 @@
-// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
+use tauri_dotnet_bridge_host;
+
 #[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
+fn dotnet_request(request: &str) -> String {
+    tauri_dotnet_bridge_host::process_request(request)
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![dotnet_request])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
