@@ -1,15 +1,18 @@
 <script setup lang="ts">
   import { ref } from 'vue'
-  import { invoke } from '@tauri-apps/api/core'
+  import { TauriApi } from './TauriApi'
 
   const greetMsg = ref('')
   const name = ref('')
 
-  async function greet() {
-    const response = await invoke('dotnet_request', {
-      request: JSON.stringify({ controller: 'home', action: 'login', data: { user: name.value, password: '<secret>' } })
-    })
-    greetMsg.value = JSON.parse(response).data
+  async function login() {
+    let userData = { user: name.value, pass: 'Hmm...' }
+
+    try {
+      greetMsg.value = await TauriApi.invokePlugin<string>({ controller: 'home', action: 'login', data: userData }) ?? 'No response'
+    } catch (error) {
+      greetMsg.value = 'ERR: ' + error
+    }
   }
 </script>
 
@@ -30,7 +33,7 @@
     </div>
     <p>Click on the Tauri, Vite, and Vue logos to learn more.</p>
 
-    <form class="row" @submit.prevent="greet">
+    <form class="row" @submit.prevent="login">
       <input id="greet-input" v-model="name" placeholder="Enter a name..." />
       <button type="submit">Greet</button>
     </form>
