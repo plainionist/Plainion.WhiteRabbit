@@ -15,12 +15,14 @@
   import { listen } from '@tauri-apps/api/event'
   import 'ag-grid-community/styles/ag-grid.css'
   import 'ag-grid-community/styles/ag-theme-alpine.css'
-  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import { faTrash } from '@fortawesome/free-solid-svg-icons'
+  import { icon } from '@fortawesome/fontawesome-svg-core'
 
   export default defineComponent({
     components: { AgGridVue },
     setup() {
+      const trashIconHtml = icon(faTrash).html[0]
+
       const items = ref([])
       const columnDefs = ref([
         { headerName: 'Begin', field: 'start', editable: true, resizable: false, suppressMovable: true, width: 100 },
@@ -34,20 +36,11 @@
           width: 50,
           cellRenderer: (params: any) => {
             const button = document.createElement('button')
-            button.innerText = 'Delete'
-            button.className = 'delete-button'
+            button.innerHTML = trashIconHtml
             button.onclick = () => {
               onDeleteRow(params.data)
             }
             return button
-            // return h(
-            //   'button',
-            //   {
-            //     class: 'delete-button-icon',
-            //     onClick: () => onDeleteRow(params.data)
-            //   },
-            //   [h(FontAwesomeIcon, { icon: faTrash })]
-            // )
           }
         }
       ])
