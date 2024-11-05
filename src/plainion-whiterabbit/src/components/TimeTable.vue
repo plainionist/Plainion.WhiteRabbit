@@ -22,7 +22,12 @@
       const selectedDate = ref(new Date())
 
       async function fetch() {
-        items.value = (await TauriApi.invokePlugin<Item[]>({ controller: 'home', action: 'day', data: selectedDate.value })) ?? []
+        items.value =
+          (await TauriApi.invokePlugin<Item[]>({
+            controller: 'home',
+            action: 'day',
+            data: { date: selectedDate.value.toISOString() }
+          })) ?? []
       }
 
       listen('measurement-stopped', () => {
