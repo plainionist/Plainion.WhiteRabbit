@@ -15,7 +15,7 @@ export class TauriApi {
   public static async invokePlugin<T>(request: PluginRequest): Promise<T | null> {
     let response = (await invoke('dotnet_request', { request: JSON.stringify(request) })) as string
     let jsonResponse = JSON.parse(response) as RouteResponse<T>
-console.log(jsonResponse)
+
     if (jsonResponse.errorMessage) throw new Error(jsonResponse.errorMessage)
 
     return jsonResponse.data ?? (null as T | null)

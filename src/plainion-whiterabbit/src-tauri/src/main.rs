@@ -13,53 +13,53 @@ fn dotnet_request(request: &str) -> String {
         {
             "data": [
                 {
-                    "start_time": "2024-11-05T08:00:00Z",
-                    "stop_time": "2024-11-05T09:30:00Z",
+                    "start": "08:00:00",
+                    "stop": "09:30:00",
                     "comment": "Worked on Project A"
                 },
                 {
-                    "start_time": "2024-11-05T10:00:00Z",
-                    "stop_time": "2024-11-05T11:45:00Z",
+                    "start": "10:00:00",
+                    "stop": "11:45:00",
                     "comment": "Code review and debugging"
                 },
                 {
-                    "start_time": "2024-11-05T13:00:00Z",
-                    "stop_time": "2024-11-05T14:30:00Z",
+                    "start": "13:00:00",
+                    "stop": "14:30:00",
                     "comment": "Team meeting and planning"
                 },
                 {
-                    "start_time": "2024-11-05T10:00:00Z",
-                    "stop_time": "2024-11-05T11:45:00Z",
+                    "start": "10:00:00",
+                    "stop": "11:45:00",
                     "comment": "Code review and debugging"
                 },
                 {
-                    "start_time": "2024-11-05T13:00:00Z",
-                    "stop_time": "2024-11-05T14:30:00Z",
+                    "start": "13:00:00",
+                    "stop": "14:30:00",
                     "comment": "Team meeting and planning"
                 },
                 {
-                    "start_time": "2024-11-05T10:00:00Z",
-                    "stop_time": "2024-11-05T11:45:00Z",
+                    "start": "10:00:00",
+                    "stop": "11:45:00",
                     "comment": "Code review and debugging"
                 },
                 {
-                    "start_time": "2024-11-05T13:00:00Z",
-                    "stop_time": "2024-11-05T14:30:00Z",
+                    "start": "13:00:00",
+                    "stop": "14:30:00",
                     "comment": "Team meeting and planning"
                 },
                 {
-                    "start_time": "2024-11-05T10:00:00Z",
-                    "stop_time": "2024-11-05T11:45:00Z",
+                    "start": "10:00:00",
+                    "stop": "11:45:00",
                     "comment": "Code review and debugging"
                 },
                 {
-                    "start_time": "2024-11-05T13:00:00Z",
-                    "stop_time": "2024-11-05T14:30:00Z",
+                    "start": "13:00:00",
+                    "stop": "14:30:00",
                     "comment": "Team meeting and planning"
                 },
                 {
-                    "start_time": "2024-11-05T15:00:00Z",
-                    "stop_time": "2024-11-05T16:15:00Z",
+                    "start": "15:00:00",
+                    "stop": "16:15:00",
                     "comment": "Worked on UI improvements"
                 }
             ]

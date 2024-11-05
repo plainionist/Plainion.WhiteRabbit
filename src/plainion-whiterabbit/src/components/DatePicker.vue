@@ -18,6 +18,7 @@
 
       async function onDateChange() {
         emit('date-selected', selectedDate.value)
+        console.log('date selected')
       }
 
       onMounted(() => {

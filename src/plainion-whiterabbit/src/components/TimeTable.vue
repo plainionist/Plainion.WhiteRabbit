@@ -15,8 +15,8 @@
     setup() {
       const items: Ref<Item[]> = ref([])
       const headers: Ref<Header[]> = ref([
-        { text: 'Start Time', value: 'start' },
-        { text: 'Stop Time', value: 'stop' },
+        { text: 'Begin', value: 'start' },
+        { text: 'End', value: 'stop' },
         { text: 'Comment', value: 'comment' }
       ])
       const selectedDate = ref(new Date())
