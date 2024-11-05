@@ -1,12 +1,15 @@
 <template>
-  <DatePicker v-model="selectedDate" @update="onDateChange" 
-    class="border border-gray-300 px-2 py-1 rounded focus:outline-none focus:border-blue-500 w-32"/>
+  <DatePicker
+    v-model="selectedDate"
+    @update="onDateChange"
+    class="border border-gray-300 px-2 py-1 rounded focus:outline-none focus:border-blue-500 w-32"
+  />
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref } from 'vue'
+  import { defineComponent, ref, onMounted } from 'vue'
   import DatePicker from 'vue3-datepicker'
-  import { TauriApi } from '../TauriApi'
+  import { emit } from '@tauri-apps/api/event'
 
   export default defineComponent({
     components: { DatePicker },
@@ -14,8 +17,12 @@
       const selectedDate = ref(new Date())
 
       async function onDateChange() {
-        return await TauriApi.invokePlugin<string>({ controller: 'home', action: 'day', data: selectedDate.value })
+        emit('date-selected', selectedDate.value)
       }
+
+      onMounted(() => {
+        onDateChange()
+      })
 
       return { selectedDate, onDateChange }
     }

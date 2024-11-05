@@ -14,9 +14,10 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed } from 'vue'
+  import { defineComponent, ref } from 'vue'
   import { TauriApi } from '../TauriApi'
   import DatePicker from './DatePicker.vue'
+  import { emit } from '@tauri-apps/api/event'
 
   export default defineComponent({
     components: { DatePicker },
@@ -59,8 +60,8 @@
           startTime.value = null
           isTiming.value = false
           elapsedTime.value = '00:00:00'
-          
-          await TauriApi.invokePlugin<Array<Object>>({
+
+          await TauriApi.invokePlugin({
             controller: 'home',
             action: 'stop',
             data: {
@@ -69,6 +70,7 @@
               comment: comment.value
             }
           })
+          emit('measurement-stopped');
         } else {
           startTime.value = new Date()
           isTiming.value = true
