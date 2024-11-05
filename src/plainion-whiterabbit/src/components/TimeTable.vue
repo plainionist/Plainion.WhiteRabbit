@@ -23,15 +23,15 @@
 
       async function fetch() {
         items.value = (await TauriApi.invokePlugin<Item[]>({ controller: 'home', action: 'day', data: selectedDate.value })) ?? []
-        console.log(items.value)
       }
 
       listen('measurement-stopped', () => {
         fetch()
       })
 
-      listen<Date>('date-selected', async (event) => {
-        selectedDate.value = event.payload
+      listen<string>('date-selected', async (event) => {
+        const localDate = new Date(event.payload)
+        selectedDate.value = localDate
         fetch()
       })
 
