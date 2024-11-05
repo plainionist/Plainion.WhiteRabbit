@@ -1,6 +1,8 @@
 <template>
-  <TimeTrackerControls style="padding-bottom:5px"/>
-  <TimeTable />
+  <div class="m-1">
+    <TimeTrackerControls />
+    <TimeTable />
+  </div>
 </template>
 
 <script lang="ts">
