@@ -9,7 +9,7 @@
       placeholder="Enter comment"
       class="border border-gray-300 px-2 py-1 rounded focus:outline-none focus:border-blue-500 w-80"
     />
-    <span v-if="isTiming" class="text-gray-600">{{ elapsedTime }}</span>
+    <span class="border border-gray-300 px-2 py-1 rounded" v-if="isTiming">{{ elapsedTime }}</span>
   </div>
 </template>
 
@@ -25,12 +25,29 @@
       const comment = ref('')
       const startTime = ref<Date | null>(null)
       const selectedDate = ref(new Date())
+      const elapsedTime = ref('00:00:00')
+      let intervalId: number | null = null
 
-      const elapsedTime = computed(() => {
-        if (!isTiming.value || !startTime.value) return '00:00:00'
-        const duration = new Date().getTime() - startTime.value.getTime()
-        return new Date(duration).toISOString().substr(11, 8) // hh:mm:ss format
-      })
+      function formatElapsedTime(startTime: Date) {
+        const now = new Date()
+        const duration = now.getTime() - startTime.getTime()
+        return new Date(duration).toISOString().substr(11, 8)
+      }
+
+      function startTimer() {
+        intervalId = window.setInterval(() => {
+          if (startTime.value) {
+            elapsedTime.value = formatElapsedTime(startTime.value)
+          }
+        }, 1000)
+      }
+
+      function stopTimer() {
+        if (intervalId !== null) {
+          clearInterval(intervalId)
+          intervalId = null
+        }
+      }
 
       function onDateChange() {
         // Handle date change logic
@@ -38,9 +55,11 @@
 
       async function toggleTimer() {
         if (isTiming.value) {
+          stopTimer()
           startTime.value = null
           isTiming.value = false
-
+          elapsedTime.value = '00:00:00'
+          
           await TauriApi.invokePlugin<Array<Object>>({
             controller: 'home',
             action: 'stop',
@@ -53,6 +72,7 @@
         } else {
           startTime.value = new Date()
           isTiming.value = true
+          startTimer()
         }
       }
 
