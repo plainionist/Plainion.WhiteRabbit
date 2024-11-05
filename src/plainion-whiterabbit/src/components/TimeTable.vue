@@ -1,7 +1,7 @@
 <template>
   <AgGridVue
     class="ag-theme-alpine"
-    style="width: 100%; height: 400px"
+    style="width: 100%; height: 350px"
     :rowData="items"
     :columnDefs="columnDefs"
     @cellValueChanged="onCellValueChanged"

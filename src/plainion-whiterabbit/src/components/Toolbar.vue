@@ -1,5 +1,6 @@
 <template>
   <div class="controls flex items-center gap-2 mb-2">
+    <ActionsMenu />
     <DatePicker v-model="selectedDate" @update="onDateChange" />
     <button @click="toggleTimer" class="flex items-center justify-center w-10 h-10 bg-blue-500 text-white rounded-full hover:bg-blue-700">
       <font-awesome-icon :icon="isTiming ? 'stop' : 'play'" />
@@ -18,9 +19,10 @@
   import { TauriApi } from '../TauriApi'
   import DatePicker from './DatePicker.vue'
   import { emit } from '@tauri-apps/api/event'
+  import ActionsMenu from './ActionsMenu.vue'
 
   export default defineComponent({
-    components: { DatePicker },
+    components: { DatePicker, ActionsMenu },
     setup() {
       const isTiming = ref(false)
       const comment = ref('')
@@ -70,7 +72,7 @@
               comment: comment.value
             }
           })
-          emit('measurement-stopped');
+          emit('measurement-stopped')
         } else {
           startTime.value = new Date()
           isTiming.value = true

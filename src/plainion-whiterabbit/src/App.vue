@@ -1,18 +1,18 @@
 <template>
   <div class="m-1">
-    <TimeTrackerControls />
+    <Toolbar />
     <TimeTable />
   </div>
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import TimeTrackerControls from './components/TimeTrackerControls.vue'
+  import Toolbar from './components/Toolbar.vue'
   import TimeTable from './components/TimeTable.vue'
 
   export default defineComponent({
     components: {
-      TimeTrackerControls,
+      Toolbar,
       TimeTable
     }
   })
