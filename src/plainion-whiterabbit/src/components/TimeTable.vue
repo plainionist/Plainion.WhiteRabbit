@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, h } from 'vue'
+  import { defineComponent, ref, Ref } from 'vue'
   import { AgGridVue } from 'ag-grid-vue3'
   import { TauriApi } from '../TauriApi'
   import { listen } from '@tauri-apps/api/event'
@@ -23,7 +23,7 @@
     setup() {
       const trashIconHtml = icon(faTrash).html[0]
 
-      const items = ref([])
+      const items: Ref<Array<Object>> = ref([])
       const columnDefs = ref([
         { headerName: 'Begin', field: 'start', editable: true, resizable: false, suppressMovable: true, width: 100 },
         { headerName: 'End', field: 'stop', editable: true, resizable: false, suppressMovable: true, width: 100 },

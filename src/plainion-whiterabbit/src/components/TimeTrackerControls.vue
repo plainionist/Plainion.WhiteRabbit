@@ -7,7 +7,7 @@
     <input
       v-model="comment"
       placeholder="Enter comment"
-      class="border border-gray-300 px-2 py-1 rounded focus:outline-none focus:border-blue-500 w-80"
+      class="border border-gray-300 px-2 py-1 rounded focus:outline-none focus:border-blue-500 w-72"
     />
     <span class="border border-gray-300 px-2 py-1 rounded" v-if="isTiming">{{ elapsedTime }}</span>
   </div>
