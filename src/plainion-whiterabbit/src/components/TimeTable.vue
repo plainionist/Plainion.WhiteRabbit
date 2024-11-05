@@ -1,5 +1,5 @@
 <template>
-  <Vue3EasyDataTable :items="items" :headers="headers" editable border-cell />
+  <Vue3EasyDataTable :items="items" :headers="headers" editable border-cell hide-footer />
 </template>
 
 <script lang="ts">
