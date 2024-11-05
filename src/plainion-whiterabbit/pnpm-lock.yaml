@@ -23,15 +23,18 @@ importers:
       '@tauri-apps/plugin-shell':
         specifier: ^2
         version: 2.0.1
+      ag-grid-community:
+        specifier: ^32.3.2
+        version: 32.3.2
+      ag-grid-vue3:
+        specifier: ^32.3.2
+        version: 32.3.2(typescript@5.6.3)
       vue:
         specifier: ^3.3.4
         version: 3.5.12(typescript@5.6.3)
       vue3-datepicker:
         specifier: ^0.4.0
         version: 0.4.0(vue@3.5.12(typescript@5.6.3))
-      vue3-easy-data-table:
-        specifier: ^1.5.47
-        version: 1.5.47(typescript@5.6.3)
     devDependencies:
       '@tauri-apps/cli':
         specifier: ^2
@@ -492,6 +495,15 @@ packages:
 
   '@vue/shared@3.5.12':
     resolution: {integrity: sha512-L2RPSAwUFbgZH20etwrXyVyCBu9OxRSi8T/38QsvnkJyvq2LufW2lDCOzm7t/U9C1mkhJGWYfCuFBCmIuNivrg==}
+
+  ag-charts-types@10.3.1:
+    resolution: {integrity: sha512-oZvu9vJLk6lmzaYi0TmVVmHFZJpVNFziU0bnllx4wR3muXCmnxz5LouKIZ8CYnNiC7VO5HmHNlFu+0DmEO5zxg==}
+
+  ag-grid-community@32.3.2:
+    resolution: {integrity: sha512-ZrgS7+F0JKV6+sy7VQdt+9xhOJd6TAnXXEmw20ByG6AZdcIDEKBRHW7TfNwUqisXJjGKoaXnYByuMz7rL9PcPg==}
+
+  ag-grid-vue3@32.3.2:
+    resolution: {integrity: sha512-oagRJguoovp6NjlmYP497S8DivibKFyjsktybpjeCuliDi39kMZ8m7TKRLpQjhL6yjGMh8hZP7fKqUVFJlGSCA==}
 
   alien-signals@0.2.0:
     resolution: {integrity: sha512-StlonZhBBrsPPwrDjiPAiVTf/rolxffLxVPT60Qv/t88BZ81BvUVzHgGqEFvJ1ii8HXtm1+zU2Icr59tfWEcag==}
@@ -955,9 +967,6 @@ packages:
     peerDependencies:
       vue: ^3.0.0
 
-  vue3-easy-data-table@1.5.47:
-    resolution: {integrity: sha512-q0bZBlWIwQ3FIhB+F98ylFPfBJWiS3Xv7QqBe3xS5MbRNZP96RFjaQn7C0Pi0J/aaucNW8gFWxPyh9NESS1ehw==}
-
   vue@3.5.12:
     resolution: {integrity: sha512-CLVZtXtn2ItBIi/zHZ0Sg1Xkb7+PU32bJJ8Bmy7ts3jxXTcbfsEfBivFYYWz1Hur+lalqGAh65Coin0r+HRUfg==}
     peerDependencies:
@@ -1323,6 +1332,19 @@ snapshots:
       vue: 3.5.12(typescript@5.6.3)
 
   '@vue/shared@3.5.12': {}
+
+  ag-charts-types@10.3.1: {}
+
+  ag-grid-community@32.3.2:
+    dependencies:
+      ag-charts-types: 10.3.1
+
+  ag-grid-vue3@32.3.2(typescript@5.6.3):
+    dependencies:
+      ag-grid-community: 32.3.2
+      vue: 3.5.12(typescript@5.6.3)
+    transitivePeerDependencies:
+      - typescript
 
   alien-signals@0.2.0: {}
 
@@ -1769,12 +1791,6 @@ snapshots:
     dependencies:
       date-fns: 2.30.0
       vue: 3.5.12(typescript@5.6.3)
-
-  vue3-easy-data-table@1.5.47(typescript@5.6.3):
-    dependencies:
-      vue: 3.5.12(typescript@5.6.3)
-    transitivePeerDependencies:
-      - typescript
 
   vue@3.5.12(typescript@5.6.3):
     dependencies:

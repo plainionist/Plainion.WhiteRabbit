@@ -1,33 +1,81 @@
 <template>
-  <Vue3EasyDataTable :items="items" :headers="headers" editable border-cell hide-footer />
+  <AgGridVue
+    class="ag-theme-alpine"
+    style="width: 100%; height: 400px"
+    :rowData="items"
+    :columnDefs="columnDefs"
+    @cellValueChanged="onCellValueChanged"
+  />
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, Ref } from 'vue'
-  import Vue3EasyDataTable from 'vue3-easy-data-table'
-  import type { Header, Item } from 'vue3-easy-data-table'
+  import { defineComponent, ref, h } from 'vue'
+  import { AgGridVue } from 'ag-grid-vue3'
   import { TauriApi } from '../TauriApi'
-  import 'vue3-easy-data-table/dist/style.css'
   import { listen } from '@tauri-apps/api/event'
+  import 'ag-grid-community/styles/ag-grid.css'
+  import 'ag-grid-community/styles/ag-theme-alpine.css'
+  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+  import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
   export default defineComponent({
-    components: { Vue3EasyDataTable },
+    components: { AgGridVue },
     setup() {
-      const items: Ref<Item[]> = ref([])
-      const headers: Ref<Header[]> = ref([
-        { text: 'Begin', value: 'start' },
-        { text: 'End', value: 'stop' },
-        { text: 'Comment', value: 'comment' }
+      const items = ref([])
+      const columnDefs = ref([
+        { headerName: 'Begin', field: 'start', editable: true, resizable: false, suppressMovable: true, width: 100 },
+        { headerName: 'End', field: 'stop', editable: true, resizable: false, suppressMovable: true, width: 100 },
+        { headerName: 'Comment', field: 'comment', editable: true, resizable: false, suppressMovable: true, flex: 1 },
+        {
+          headerName: '',
+          field: 'actions',
+          resizable: false,
+          suppressMovable: true,
+          width: 50,
+          cellRenderer: (params: any) => {
+            const button = document.createElement('button')
+            button.innerText = 'Delete'
+            button.className = 'delete-button'
+            button.onclick = () => {
+              onDeleteRow(params.data)
+            }
+            return button
+            // return h(
+            //   'button',
+            //   {
+            //     class: 'delete-button-icon',
+            //     onClick: () => onDeleteRow(params.data)
+            //   },
+            //   [h(FontAwesomeIcon, { icon: faTrash })]
+            // )
+          }
+        }
       ])
       const selectedDate = ref(new Date())
 
       async function fetch() {
         items.value =
-          (await TauriApi.invokePlugin<Item[]>({
+          (await TauriApi.invokePlugin<Array<Object>>({
             controller: 'home',
             action: 'day',
             data: { date: selectedDate.value.toISOString() }
           })) ?? []
+      }
+
+      async function update() {
+        await TauriApi.invokePlugin({
+          controller: 'home',
+          action: 'updateItem',
+          data: items.value
+        })
+      }
+      async function onCellValueChanged() {
+        update()
+      }
+
+      async function onDeleteRow(rowData: any) {
+        items.value = items.value.filter((item) => item !== rowData)
+        update()
       }
 
       listen('measurement-stopped', () => {
@@ -40,7 +88,7 @@
         fetch()
       })
 
-      return { items, headers }
+      return { items, columnDefs, onCellValueChanged, onDeleteRow }
     }
   })
 </script>
