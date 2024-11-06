@@ -14,12 +14,16 @@
   import { faTrash } from '@fortawesome/free-solid-svg-icons'
   import { icon } from '@fortawesome/fontawesome-svg-core'
 
+  interface TableRow {
+    begin: Date
+    end: Date
+    comment: string
+  }
+
   export default defineComponent({
     components: { AgGridVue },
     setup() {
       const trashIconHtml = icon(faTrash).html[0]
-
-      const items: Ref<Array<Object>> = ref([])
       const columnDefs = ref([
         { headerName: 'Begin', field: 'start', editable: true, resizable: false, suppressMovable: true, width: 100 },
         { headerName: 'End', field: 'stop', editable: true, resizable: false, suppressMovable: true, width: 100 },
@@ -38,11 +42,12 @@
           }
         }
       ])
+      const items: Ref<Array<TableRow>> = ref([])
       const selectedDate = ref(new Date())
 
       async function fetch() {
         items.value =
-          (await TauriApi.invokePlugin<Array<Object>>({
+          (await TauriApi.invokePlugin<Array<TableRow>>({
             controller: 'home',
             action: 'day',
             data: { date: selectedDate.value.toISOString() }

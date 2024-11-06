@@ -22,11 +22,12 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
+  import type { ReportEntry } from '../types/types';
 
   export default defineComponent({
     props: {
       reportData: {
-        type: Array,
+        type: Array<ReportEntry>,
         required: true
       }
     },

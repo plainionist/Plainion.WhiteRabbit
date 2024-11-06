@@ -72,6 +72,7 @@
               comment: comment.value
             }
           })
+
           emit('measurement-stopped')
         } else {
           startTime.value = new Date()

@@ -18,12 +18,13 @@
   import ReportModal from './ReportModal.vue'
   import { TauriApi } from '../TauriApi'
   import { listen } from '@tauri-apps/api/event'
+  import type { ReportEntry } from '../types/types';
 
   export default defineComponent({
     components: { ReportModal },
     setup() {
       const showReportModal = ref(false)
-      const reportData: Ref<Array<Object>> = ref([])
+      const reportData: Ref<Array<ReportEntry>> = ref([])
       const showMenu = ref(false)
       const selectedDate = ref(new Date())
 
@@ -32,7 +33,7 @@
       }
 
       async function openReport(period: string) {
-        const data = await TauriApi.invokePlugin<Array<Object>>({
+        const data = await TauriApi.invokePlugin<Array<ReportEntry>>({
           controller: 'home',
           action: 'report',
           data: { date: selectedDate.value, period }
