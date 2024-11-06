@@ -26,7 +26,7 @@
   import { emit } from '@tauri-apps/api/event'
   import ActionsMenu from './ActionsMenu.vue'
   import { listen } from '@tauri-apps/api/event'
-  import { getCurrentWindow, LogicalPosition, LogicalSize, currentMonitor } from '@tauri-apps/api/window'
+  import { useCompactWindow } from '../composables/useCompactWindow'
 
   export default defineComponent({
     components: { DatePicker, ActionsMenu },
@@ -38,6 +38,7 @@
       const elapsedTime = ref('00:00:00')
       let intervalId: number | null = null
       const commentInput: Readonly<ShallowRef<HTMLElement | null>> = useTemplateRef('commentInput')
+      const { minimizeWindow, restoreWindow } = useCompactWindow()
 
       function formatElapsedTime(startTime: Date) {
         const now = new Date()
@@ -64,7 +65,7 @@
         if (isTiming.value) {
           stopTimer()
 
-          undoSlim()
+          restoreWindow()
 
           await TauriApi.invokePlugin({
             controller: 'home',
@@ -82,7 +83,7 @@
           isTiming.value = false
           elapsedTime.value = '00:00:00'
         } else {
-          makeSlim()
+          minimizeWindow()
 
           startTime.value = new Date()
           isTiming.value = true
@@ -95,33 +96,6 @@
         isToday.value = new Date(event.payload).toDateString() === new Date().toDateString()
         commentInput.value?.focus()
       })
-
-      let originalSize: any = null
-      let originalPosition: any = null
-
-      async function makeSlim() {
-        const window = getCurrentWindow()
-
-        originalSize = await window.innerSize()
-        originalPosition = await window.outerPosition()
-
-        await window.setDecorations(false)
-
-        const panelHeight = 50
-        await window.setSize(new LogicalSize(originalSize.width, panelHeight))
-        await window.setPosition(new LogicalPosition(originalPosition.x, 0))
-      }
-
-      async function undoSlim() {
-        const window = getCurrentWindow()
-
-        if (originalSize && originalPosition) {
-          await window.setDecorations(true)
-
-          await window.setSize(originalSize)
-          await window.setPosition(originalPosition)
-        }
-      }
 
       return { isTiming, comment, elapsedTime, toggleTimer, isToday }
     }
