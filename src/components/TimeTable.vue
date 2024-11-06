@@ -15,6 +15,7 @@
   import { icon } from '@fortawesome/fontawesome-svg-core'
 
   interface TableRow {
+    idx: number
     begin: Date | null
     end: Date | null
     comment: string
@@ -90,9 +91,9 @@
             data: { date: selectedDate.value.toLocaleDateString() }
           })) ?? []
 
-        const emptyRow: TableRow = { begin: null, end: null, comment: '' }
+        const emptyRow: TableRow = { idx: 0, begin: null, end: null, comment: '' }
 
-        items.value = [...data, emptyRow]
+        items.value = [...data, emptyRow].map((item, idx) => ({ ...item, idx }))
       }
 
       async function update() {
@@ -113,7 +114,7 @@
       }
 
       async function onDeleteRow(rowData: any) {
-        items.value = items.value.filter((item) => item !== rowData)
+        items.value = items.value.filter((item) => item.idx !== rowData.idx)
         update()
       }
 
