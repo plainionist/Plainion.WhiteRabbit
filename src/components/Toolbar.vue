@@ -26,6 +26,7 @@
   import { emit } from '@tauri-apps/api/event'
   import ActionsMenu from './ActionsMenu.vue'
   import { listen } from '@tauri-apps/api/event'
+  import { getCurrentWindow, LogicalPosition, LogicalSize, currentMonitor } from '@tauri-apps/api/window'
 
   export default defineComponent({
     components: { DatePicker, ActionsMenu },
@@ -63,6 +64,8 @@
         if (isTiming.value) {
           stopTimer()
 
+          undoSlim()
+
           await TauriApi.invokePlugin({
             controller: 'home',
             action: 'addActivity',
@@ -79,8 +82,11 @@
           isTiming.value = false
           elapsedTime.value = '00:00:00'
         } else {
+          makeSlim()
+
           startTime.value = new Date()
           isTiming.value = true
+
           startTimer()
         }
       }
@@ -88,8 +94,39 @@
       listen<string>('date-selected', async (event) => {
         isToday.value = new Date(event.payload).toDateString() === new Date().toDateString()
         commentInput.value?.focus()
-        console.log(commentInput.value)
       })
+
+      let originalSize: any = null
+      let originalPosition: any = null
+
+      async function makeSlim() {
+        const window = getCurrentWindow()
+
+        if (!originalSize) {
+          originalSize = await window.innerSize()
+          originalPosition = await window.outerPosition()
+        }
+
+        await window.setDecorations(false)
+
+        const panelHeight = 50
+        await window.setSize(new LogicalSize(originalSize.width, panelHeight))
+
+        const monitor = await currentMonitor()
+        const screenWidth = monitor?.size.width ?? 1920
+        await window.setPosition(new LogicalPosition(screenWidth - originalSize.width - 150, 0))
+      }
+
+      async function undoSlim() {
+        const window = getCurrentWindow()
+
+        if (originalSize && originalPosition) {
+          await window.setDecorations(true)
+
+          await window.setSize(originalSize)
+          await window.setPosition(originalPosition)
+        }
+      }
 
       return { isTiming, comment, elapsedTime, toggleTimer, isToday }
     }
