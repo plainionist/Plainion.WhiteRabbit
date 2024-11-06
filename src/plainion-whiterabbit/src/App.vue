@@ -1,5 +1,5 @@
 <template>
-  <div class="m-1">
+  <div class="p-1 container">
     <Toolbar />
     <TimeTable />
   </div>
@@ -17,3 +17,11 @@
     }
   })
 </script>
+
+<style scoped>
+  .container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+</style>

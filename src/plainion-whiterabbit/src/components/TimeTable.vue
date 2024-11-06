@@ -1,11 +1,7 @@
 <template>
-  <AgGridVue
-    class="ag-theme-alpine"
-    style="width: 100%; height: 350px"
-    :rowData="items"
-    :columnDefs="columnDefs"
-    @cellValueChanged="onCellValueChanged"
-  />
+  <div class="grid-container">
+    <AgGridVue class="ag-theme-alpine" :rowData="items" :columnDefs="columnDefs" @cellValueChanged="onCellValueChanged" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -37,9 +33,7 @@
           cellRenderer: (params: any) => {
             const button = document.createElement('button')
             button.innerHTML = trashIconHtml
-            button.onclick = () => {
-              onDeleteRow(params.data)
-            }
+            button.onclick = () => onDeleteRow(params.data)
             return button
           }
         }
@@ -58,10 +52,14 @@
       async function update() {
         await TauriApi.invokePlugin({
           controller: 'home',
-          action: 'updateItem',
-          data: items.value
+          action: 'update',
+          data: {
+            date: selectedDate.value,
+            items: items.value
+          }
         })
       }
+
       async function onCellValueChanged() {
         update()
       }
@@ -76,8 +74,7 @@
       })
 
       listen<string>('date-selected', async (event) => {
-        const localDate = new Date(event.payload)
-        selectedDate.value = localDate
+        selectedDate.value = new Date(event.payload)
         fetch()
       })
 
@@ -85,3 +82,16 @@
     }
   })
 </script>
+
+<style scoped>
+  .grid-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ag-theme-alpine {
+    width: 100%;
+    flex-grow: 1;
+  }
+</style>

@@ -5,42 +5,47 @@
     </button>
 
     <div v-if="showMenu" class="dropdown-menu">
-      <button @click="openReport('day')">Daily Report</button>
-      <button @click="openReport('week')">Weekly Report</button>
-      <button @click="openReport('month')">Monthly Report</button>
+      <button @click="openReport('day')">Summary Day</button>
+      <button @click="openReport('week')">Summary Week</button>
+      <button @click="openReport('month')">Summary Month</button>
     </div>
   </div>
   <ReportModal v-if="showReportModal" :reportData="reportData" @close="showReportModal = false" />
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref } from 'vue'
-  import ReportModal from './ReportModal.vue' // Create this component for displaying reports
+  import { defineComponent, ref, Ref } from 'vue'
+  import ReportModal from './ReportModal.vue'
   import { TauriApi } from '../TauriApi'
+  import { listen } from '@tauri-apps/api/event'
 
   export default defineComponent({
     components: { ReportModal },
     setup() {
       const showReportModal = ref(false)
-      const reportData = ref([])
+      const reportData: Ref<Array<Object>> = ref([])
       const showMenu = ref(false)
+      const selectedDate = ref(new Date())
 
       function toggleMenu() {
         showMenu.value = !showMenu.value
       }
 
       async function openReport(period: string) {
-        // Fetch report data from the backend based on the selected period
         const data = await TauriApi.invokePlugin<Array<Object>>({
           controller: 'home',
-          action: 'generateReport',
-          data: { period } // Can be 'day', 'week', or 'month'
+          action: 'report',
+          data: { date: selectedDate.value, period }
         })
 
         showMenu.value = false
-        reportData.value = data
+        reportData.value = data ?? []
         showReportModal.value = true
       }
+
+      listen<string>('date-selected', async (event) => {
+        selectedDate.value = new Date(event.payload)
+      })
 
       return { showReportModal, reportData, openReport, showMenu, toggleMenu }
     }

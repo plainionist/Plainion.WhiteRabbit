@@ -65,7 +65,7 @@
 
           await TauriApi.invokePlugin({
             controller: 'home',
-            action: 'stop',
+            action: 'addItem',
             data: {
               startTime: startTime.value,
               stopTime: new Date(),
