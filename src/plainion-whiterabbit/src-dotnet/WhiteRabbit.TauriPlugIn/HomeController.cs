@@ -5,13 +5,6 @@ public class DayRequest
     public DateTime Date { get; set; }
 }
 
-public class Activity
-{
-    public DateTime? Begin { get; set; }
-    public DateTime? End { get; set; }
-    public string? Comment { get; set; }
-}
-
 public class UpdateRequest
 {
     public DateTime Date { get; set; }
@@ -20,33 +13,11 @@ public class UpdateRequest
 
 public class HomeController
 {
-    private readonly Dictionary<DateTime, List<Activity>> myActivities = [];
+    private readonly DataStore myDataStore = new();
 
-    public List<Activity> Day(DayRequest request)
-    {
-        return myActivities.GetValueOrDefault(request.Date.Date) ?? [];
-    }
+    public List<Activity> Day(DayRequest request) => myDataStore.Day(request);
 
-    public void AddActivity(Activity activity)
-    {
-        var date = activity.Begin?.Date.Date;
-        if (date == null)
-        {
-            return;
-        }
+    public void AddActivity(Activity activity) => myDataStore.AddActivity(activity);
 
-        if (!myActivities.TryGetValue(date.Value, out var activities))
-        {
-            activities = [];
-            myActivities.Add(date.Value, activities);
-        }
-        activities.Add(activity);
-    }
-
-    public void Update(UpdateRequest request)
-    {
-        myActivities[request.Date.Date] = (request.Items ?? [])
-            .Where(x => x.Begin != null)
-            .ToList();
-    }
+    public void Update(UpdateRequest request) => myDataStore.Update(request);
 }
