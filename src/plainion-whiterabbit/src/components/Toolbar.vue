@@ -1,8 +1,12 @@
 <template>
   <div class="controls flex items-center gap-2 mb-2">
     <ActionsMenu />
-    <DatePicker v-model="selectedDate" @update="onDateChange" />
-    <button @click="toggleTimer" class="flex items-center justify-center w-10 h-10 bg-blue-500 text-white rounded-full hover:bg-blue-700">
+    <DatePicker />
+    <button
+      @click="toggleTimer"
+      class="flex items-center justify-center w-10 h-10 bg-blue-500 text-white rounded-full hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-50"
+      :disabled="!isToday"
+    >
       <font-awesome-icon :icon="isTiming ? 'stop' : 'play'" />
     </button>
     <input
@@ -20,6 +24,7 @@
   import DatePicker from './DatePicker.vue'
   import { emit } from '@tauri-apps/api/event'
   import ActionsMenu from './ActionsMenu.vue'
+  import { listen } from '@tauri-apps/api/event'
 
   export default defineComponent({
     components: { DatePicker, ActionsMenu },
@@ -27,7 +32,7 @@
       const isTiming = ref(false)
       const comment = ref('')
       const startTime = ref<Date | null>(null)
-      const selectedDate = ref(new Date())
+      const isToday = ref(true)
       const elapsedTime = ref('00:00:00')
       let intervalId: number | null = null
 
@@ -52,28 +57,25 @@
         }
       }
 
-      function onDateChange() {
-        // Handle date change logic
-      }
-
       async function toggleTimer() {
         if (isTiming.value) {
           stopTimer()
-          startTime.value = null
-          isTiming.value = false
-          elapsedTime.value = '00:00:00'
 
           await TauriApi.invokePlugin({
             controller: 'home',
-            action: 'addItem',
+            action: 'addActivity',
             data: {
-              startTime: startTime.value,
-              stopTime: new Date(),
+              begin: startTime.value,
+              end: new Date(),
               comment: comment.value
             }
           })
 
           emit('measurement-stopped')
+
+          startTime.value = null
+          isTiming.value = false
+          elapsedTime.value = '00:00:00'
         } else {
           startTime.value = new Date()
           isTiming.value = true
@@ -81,7 +83,11 @@
         }
       }
 
-      return { isTiming, comment, elapsedTime, selectedDate, toggleTimer, onDateChange }
+      listen<string>('date-selected', async (event) => {
+        isToday.value = new Date(event.payload).toDateString() === new Date().toDateString()
+      })
+
+      return { isTiming, comment, elapsedTime, toggleTimer, isToday }
     }
   })
 </script>

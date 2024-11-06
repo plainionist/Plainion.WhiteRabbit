@@ -1,18 +1,44 @@
-using TauriDotNetBridge.Contracts;
-
 namespace WhiteRabbit.TauriPlugIn;
 
-public class LogInInfo
+public class DayRequest
 {
-    public string? User { get; set; }
-    public string? Password { get; set; }
+    public DateTime Date { get; set; }
+}
+
+public class Activity
+{
+    public DateTime Begin { get; set; }
+    public DateTime End { get; set; }
+    public string? Comment { get; set; }
+}
+
+public class UpdateRequest
+{
+    public DateTime Date { get; set; }
+    public Activity[]? Items { get; set; }
 }
 
 public class HomeController
 {
-    [RouteMethod]
-    public RouteResponse Login(LogInInfo loginInfo)
+    private readonly Dictionary<DateTime, List<Activity>> myActivities = [];
+
+    public List<Activity> Day(DayRequest request)
     {
-        return RouteResponse.Ok($"User '{loginInfo.User}' logged in successfully");
+        return myActivities.GetValueOrDefault(request.Date.Date) ?? [];
+    }
+
+    public void AddActivity(Activity activity)
+    {
+        if (!myActivities.TryGetValue(activity.Begin.Date.Date, out var activities))
+        {
+            activities = [];
+            myActivities.Add(activity.Begin.Date, activities);
+        }
+        activities.Add(activity);
+    }
+
+    public void Update(UpdateRequest request)
+    {
+        myActivities[request.Date.Date] = request.Items?.ToList() ?? [];
     }
 }

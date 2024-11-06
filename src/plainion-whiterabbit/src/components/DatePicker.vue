@@ -17,7 +17,7 @@
       })
 
       async function onDateChange() {
-        emit('date-selected', selectedDate.value.toISOString())
+        emit('date-selected', selectedDate.value)
       }
 
       onMounted(() => {

@@ -1,6 +1,8 @@
 use std::process::Command;
 
 fn main() {
+    println!("cargo:rerun-if-changed=../src-dotnet");
+
     Command::new("dotnet")
         .arg("build")
         .current_dir("../src-dotnet")

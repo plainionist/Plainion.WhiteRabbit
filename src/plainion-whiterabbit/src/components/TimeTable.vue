@@ -23,10 +23,22 @@
   export default defineComponent({
     components: { AgGridVue },
     setup() {
+      function timeOnly(params: any) {
+        const date = new Date(params.value)
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })
+      }
       const trashIconHtml = icon(faTrash).html[0]
       const columnDefs = ref([
-        { headerName: 'Begin', field: 'start', editable: true, resizable: false, suppressMovable: true, width: 100 },
-        { headerName: 'End', field: 'stop', editable: true, resizable: false, suppressMovable: true, width: 100 },
+        {
+          headerName: 'Begin',
+          field: 'begin',
+          editable: true,
+          resizable: false,
+          suppressMovable: true,
+          width: 100,
+          valueFormatter: timeOnly
+        },
+        { headerName: 'End', field: 'end', editable: true, resizable: false, suppressMovable: true, width: 100, valueFormatter: timeOnly },
         { headerName: 'Comment', field: 'comment', editable: true, resizable: false, suppressMovable: true, flex: 1 },
         {
           headerName: '',
@@ -50,7 +62,7 @@
           (await TauriApi.invokePlugin<Array<TableRow>>({
             controller: 'home',
             action: 'day',
-            data: { date: selectedDate.value.toISOString() }
+            data: { date: selectedDate.value.toLocaleDateString() }
           })) ?? []
       }
 
