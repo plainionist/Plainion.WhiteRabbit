@@ -13,13 +13,14 @@
       v-model="comment"
       placeholder="Enter comment"
       class="border border-gray-300 px-2 py-1 rounded focus:outline-none focus:border-blue-500 w-72"
+      ref="commentInput"
     />
     <span class="border border-gray-300 px-2 py-1 rounded" v-if="isTiming">{{ elapsedTime }}</span>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref } from 'vue'
+  import { defineComponent, ref, ShallowRef, useTemplateRef } from 'vue'
   import { TauriApi } from '../TauriApi'
   import DatePicker from './DatePicker.vue'
   import { emit } from '@tauri-apps/api/event'
@@ -35,6 +36,7 @@
       const isToday = ref(true)
       const elapsedTime = ref('00:00:00')
       let intervalId: number | null = null
+      const commentInput: Readonly<ShallowRef<HTMLElement | null>> = useTemplateRef('commentInput')
 
       function formatElapsedTime(startTime: Date) {
         const now = new Date()
@@ -85,6 +87,8 @@
 
       listen<string>('date-selected', async (event) => {
         isToday.value = new Date(event.payload).toDateString() === new Date().toDateString()
+        commentInput.value?.focus()
+        console.log(commentInput.value)
       })
 
       return { isTiming, comment, elapsedTime, toggleTimer, isToday }
