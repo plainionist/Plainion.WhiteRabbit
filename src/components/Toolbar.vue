@@ -39,7 +39,7 @@
       const { minimizeWindow, restoreWindow } = useCompactWindow()
       const { elapsedTime, startTimer, stopTimer } = useTimer()
 
-      const isTiming = computed(() => elapsedTime.value !== null);
+      const isTiming = computed(() => elapsedTime.value !== null)
 
       async function toggleTimer() {
         if (isTiming.value) {
