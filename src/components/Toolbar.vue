@@ -102,19 +102,14 @@
       async function makeSlim() {
         const window = getCurrentWindow()
 
-        if (!originalSize) {
-          originalSize = await window.innerSize()
-          originalPosition = await window.outerPosition()
-        }
+        originalSize = await window.innerSize()
+        originalPosition = await window.outerPosition()
 
         await window.setDecorations(false)
 
         const panelHeight = 50
         await window.setSize(new LogicalSize(originalSize.width, panelHeight))
-
-        const monitor = await currentMonitor()
-        const screenWidth = monitor?.size.width ?? 1920
-        await window.setPosition(new LogicalPosition(screenWidth - originalSize.width - 150, 0))
+        await window.setPosition(new LogicalPosition(originalPosition.x, 0))
       }
 
       async function undoSlim() {
