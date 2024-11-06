@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, Ref } from 'vue'
+  import { defineComponent, ref, Ref, onMounted } from 'vue'
   import { AgGridVue } from 'ag-grid-vue3'
   import { TauriApi } from '../TauriApi'
   import { listen } from '@tauri-apps/api/event'
@@ -15,18 +15,33 @@
   import { icon } from '@fortawesome/fontawesome-svg-core'
 
   interface TableRow {
-    begin: Date
-    end: Date
+    begin: Date | null
+    end: Date | null
     comment: string
   }
 
   export default defineComponent({
     components: { AgGridVue },
     setup() {
-      function timeOnly(params: any) {
+      function timeValueFormatter(params: any) {
+        if (params.value === null) return ''
         const date = new Date(params.value)
         return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })
       }
+
+      function timeValueParser(params: any) {
+        // User is expected to enter HH:mm
+        const [hours, minutes] = params.newValue.split(':').map(Number)
+
+        let date = new Date(selectedDate.value)
+        date.setHours(hours)
+        date.setMinutes(minutes)
+        date.setSeconds(0)
+        date.setMilliseconds(0)
+
+        return date
+      }
+
       const trashIconHtml = icon(faTrash).html[0]
       const columnDefs = ref([
         {
@@ -36,9 +51,19 @@
           resizable: false,
           suppressMovable: true,
           width: 100,
-          valueFormatter: timeOnly
+          valueFormatter: timeValueFormatter,
+          valueParser: timeValueParser
         },
-        { headerName: 'End', field: 'end', editable: true, resizable: false, suppressMovable: true, width: 100, valueFormatter: timeOnly },
+        {
+          headerName: 'End',
+          field: 'end',
+          editable: true,
+          resizable: false,
+          suppressMovable: true,
+          width: 100,
+          valueFormatter: timeValueFormatter,
+          valueParser: timeValueParser
+        },
         { headerName: 'Comment', field: 'comment', editable: true, resizable: false, suppressMovable: true, flex: 1 },
         {
           headerName: '',
@@ -58,12 +83,16 @@
       const selectedDate = ref(new Date())
 
       async function fetch() {
-        items.value =
+        const data =
           (await TauriApi.invokePlugin<Array<TableRow>>({
             controller: 'home',
             action: 'day',
             data: { date: selectedDate.value.toLocaleDateString() }
           })) ?? []
+
+        const emptyRow: TableRow = { begin: null, end: null, comment: '' }
+
+        items.value = [...data, emptyRow]
       }
 
       async function update() {
@@ -75,6 +104,8 @@
             items: items.value
           }
         })
+        // make sure that backend is the only master
+        fetch()
       }
 
       async function onCellValueChanged() {
@@ -92,6 +123,10 @@
 
       listen<string>('date-selected', async (event) => {
         selectedDate.value = new Date(event.payload)
+        fetch()
+      })
+
+      onMounted(() => {
         fetch()
       })
 

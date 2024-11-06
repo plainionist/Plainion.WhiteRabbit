@@ -7,8 +7,8 @@ public class DayRequest
 
 public class Activity
 {
-    public DateTime Begin { get; set; }
-    public DateTime End { get; set; }
+    public DateTime? Begin { get; set; }
+    public DateTime? End { get; set; }
     public string? Comment { get; set; }
 }
 
@@ -29,16 +29,24 @@ public class HomeController
 
     public void AddActivity(Activity activity)
     {
-        if (!myActivities.TryGetValue(activity.Begin.Date.Date, out var activities))
+        var date = activity.Begin?.Date.Date;
+        if (date == null)
+        {
+            return;
+        }
+
+        if (!myActivities.TryGetValue(date.Value, out var activities))
         {
             activities = [];
-            myActivities.Add(activity.Begin.Date, activities);
+            myActivities.Add(date.Value, activities);
         }
         activities.Add(activity);
     }
 
     public void Update(UpdateRequest request)
     {
-        myActivities[request.Date.Date] = request.Items?.ToList() ?? [];
+        myActivities[request.Date.Date] = (request.Items ?? [])
+            .Where(x => x.Begin != null)
+            .ToList();
     }
 }
