@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.11.35327.3
+VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plainion.WhiteRabbit", "src\Plainion.WhiteRabbit\Plainion.WhiteRabbit.csproj", "{17326B5F-B907-479D-BDDA-8D2736C7328D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plainion.WhiteRabbit", "src-legacy\Plainion.WhiteRabbit.csproj", "{4AEF5C7F-916D-481D-A73F-90957AA28E7A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src-dotnet", "src-dotnet", "{34875C1A-47F2-4C68-94E6-06157EC567A4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WhiteRabbit.TauriPlugIn", "src-dotnet\WhiteRabbit.TauriPlugIn\WhiteRabbit.TauriPlugIn.csproj", "{D8D8B208-1708-46A8-AE60-3080294EF467}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +15,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{17326B5F-B907-479D-BDDA-8D2736C7328D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{17326B5F-B907-479D-BDDA-8D2736C7328D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{17326B5F-B907-479D-BDDA-8D2736C7328D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{17326B5F-B907-479D-BDDA-8D2736C7328D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AEF5C7F-916D-481D-A73F-90957AA28E7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AEF5C7F-916D-481D-A73F-90957AA28E7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AEF5C7F-916D-481D-A73F-90957AA28E7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AEF5C7F-916D-481D-A73F-90957AA28E7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8D8B208-1708-46A8-AE60-3080294EF467}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8D8B208-1708-46A8-AE60-3080294EF467}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8D8B208-1708-46A8-AE60-3080294EF467}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8D8B208-1708-46A8-AE60-3080294EF467}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D8D8B208-1708-46A8-AE60-3080294EF467} = {34875C1A-47F2-4C68-94E6-06157EC567A4}
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {05557C8A-C32D-416E-9932-24E5E3C4AD28}
+		SolutionGuid = {C38F7F2A-1F01-40D4-91BC-56B4C141F10D}
 	EndGlobalSection
 EndGlobal
