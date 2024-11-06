@@ -1,4 +1,4 @@
-import { getCurrentWindow, LogicalPosition, LogicalSize, currentMonitor } from '@tauri-apps/api/window'
+import { getCurrentWindow, LogicalPosition, LogicalSize } from '@tauri-apps/api/window'
 
 export function useCompactWindow() {
   let originalSize: any = null

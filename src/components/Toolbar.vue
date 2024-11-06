@@ -27,43 +27,22 @@
   import ActionsMenu from './ActionsMenu.vue'
   import { listen } from '@tauri-apps/api/event'
   import { useCompactWindow } from '../composables/useCompactWindow'
+  import { useTimer } from '../composables/useTimer'
 
   export default defineComponent({
     components: { DatePicker, ActionsMenu },
     setup() {
       const isTiming = ref(false)
       const comment = ref('')
-      const startTime = ref<Date | null>(null)
       const isToday = ref(true)
-      const elapsedTime = ref('00:00:00')
-      let intervalId: number | null = null
       const commentInput: Readonly<ShallowRef<HTMLElement | null>> = useTemplateRef('commentInput')
+
       const { minimizeWindow, restoreWindow } = useCompactWindow()
-
-      function formatElapsedTime(startTime: Date) {
-        const now = new Date()
-        const duration = now.getTime() - startTime.getTime()
-        return new Date(duration).toISOString().substr(11, 8)
-      }
-
-      function startTimer() {
-        intervalId = window.setInterval(() => {
-          if (startTime.value) {
-            elapsedTime.value = formatElapsedTime(startTime.value)
-          }
-        }, 1000)
-      }
-
-      function stopTimer() {
-        if (intervalId !== null) {
-          clearInterval(intervalId)
-          intervalId = null
-        }
-      }
+      const { elapsedTime, startTimer, stopTimer } = useTimer()
 
       async function toggleTimer() {
         if (isTiming.value) {
-          stopTimer()
+          const startedTime = stopTimer()
 
           restoreWindow()
 
@@ -71,7 +50,7 @@
             controller: 'home',
             action: 'addActivity',
             data: {
-              begin: startTime.value,
+              begin: startedTime,
               end: new Date(),
               comment: comment.value
             }
@@ -79,13 +58,10 @@
 
           emit('measurement-stopped')
 
-          startTime.value = null
           isTiming.value = false
-          elapsedTime.value = '00:00:00'
         } else {
           minimizeWindow()
 
-          startTime.value = new Date()
           isTiming.value = true
 
           startTimer()
