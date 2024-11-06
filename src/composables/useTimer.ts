@@ -1,18 +1,19 @@
-import { ref } from 'vue'
+import { ref, Ref } from 'vue'
 
 export function useTimer() {
   let startTime: Date | null = null
-  const elapsedTime = ref('00:00:00')
+  const elapsedTime: Ref<String | null> = ref(null)
   let intervalId: number | null = null
 
   function formatElapsedTime(startTime: Date) {
     const now = new Date()
     const duration = now.getTime() - startTime.getTime()
-    return new Date(duration).toISOString().substr(11, 8)
+    return new Date(duration).toISOString().slice(11, 19)
   }
 
   function startTimer() {
     startTime = new Date()
+    elapsedTime.value = '00:00:00'
 
     intervalId = window.setInterval(() => {
       if (startTime) {
@@ -30,7 +31,7 @@ export function useTimer() {
     const startedTime = startTime
 
     startTime = null
-    elapsedTime.value = '00:00:00'
+    elapsedTime.value = null
 
     return startedTime
   }

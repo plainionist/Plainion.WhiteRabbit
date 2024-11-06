@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, ShallowRef, useTemplateRef } from 'vue'
+  import { computed, defineComponent, ref, ShallowRef, useTemplateRef } from 'vue'
   import { TauriApi } from '../TauriApi'
   import DatePicker from './DatePicker.vue'
   import { emit } from '@tauri-apps/api/event'
@@ -32,13 +32,14 @@
   export default defineComponent({
     components: { DatePicker, ActionsMenu },
     setup() {
-      const isTiming = ref(false)
       const comment = ref('')
       const isToday = ref(true)
       const commentInput: Readonly<ShallowRef<HTMLElement | null>> = useTemplateRef('commentInput')
 
       const { minimizeWindow, restoreWindow } = useCompactWindow()
       const { elapsedTime, startTimer, stopTimer } = useTimer()
+
+      const isTiming = computed(() => elapsedTime.value !== null);
 
       async function toggleTimer() {
         if (isTiming.value) {
@@ -57,13 +58,8 @@
           })
 
           emit('measurement-stopped')
-
-          isTiming.value = false
         } else {
           minimizeWindow()
-
-          isTiming.value = true
-
           startTimer()
         }
       }
