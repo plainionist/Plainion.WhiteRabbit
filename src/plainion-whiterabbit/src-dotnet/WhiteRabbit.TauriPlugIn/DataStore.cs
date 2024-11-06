@@ -2,11 +2,13 @@ namespace WhiteRabbit.TauriPlugIn;
 
 public class DataStore
 {
+    private static readonly string DBStore = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "WhiteRabbit-3.0");
+
     private readonly Dictionary<DateTime, List<Activity>> myActivities = [];
 
-    public List<Activity> Day(DayRequest request)
+    public IReadOnlyCollection<Activity> Day(DateTime date)
     {
-        return myActivities.GetValueOrDefault(request.Date.Date) ?? [];
+        return myActivities.GetValueOrDefault(date.Date) ?? [];
     }
 
     public void AddActivity(Activity activity)
@@ -25,11 +27,8 @@ public class DataStore
         activities.Add(activity);
     }
 
-    public void Update(UpdateRequest request)
+    public void Update(DateTime date, IEnumerable<Activity> activities)
     {
-        myActivities[request.Date.Date] = (request.Items ?? [])
-            .Where(x => x.Begin != null)
-            .ToList();
+        myActivities[date.Date] = activities.ToList();
     }
-
 }

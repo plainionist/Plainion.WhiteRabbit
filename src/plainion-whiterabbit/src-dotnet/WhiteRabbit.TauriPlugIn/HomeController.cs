@@ -15,9 +15,18 @@ public class HomeController
 {
     private readonly DataStore myDataStore = new();
 
-    public List<Activity> Day(DayRequest request) => myDataStore.Day(request);
+    public IReadOnlyCollection<Activity> Day(DayRequest request) => 
+        myDataStore.Day(request.Date);
 
-    public void AddActivity(Activity activity) => myDataStore.AddActivity(activity);
+    public void AddActivity(Activity activity) => 
+        myDataStore.AddActivity(activity);
 
-    public void Update(UpdateRequest request) => myDataStore.Update(request);
+    public void Update(UpdateRequest request)
+    {
+        var activities = (request.Items ?? [])
+            .Where(x => x.Begin != null)
+            .ToList();
+
+        myDataStore.Update(request.Date, activities);
+    }
 }
