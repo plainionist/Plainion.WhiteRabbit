@@ -16,7 +16,7 @@ public class HomeController
     private readonly DataStore myDataStore = new();
 
     public IReadOnlyCollection<Activity> Day(DayRequest request) => 
-        myDataStore.Day(request.Date);
+        myDataStore.GetActivities(request.Date);
 
     public void AddActivity(Activity activity) => 
         myDataStore.AddActivity(activity);

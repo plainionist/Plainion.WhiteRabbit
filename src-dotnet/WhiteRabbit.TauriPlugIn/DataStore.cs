@@ -1,15 +1,29 @@
+using Newtonsoft.Json;
+
 namespace WhiteRabbit.TauriPlugIn;
 
 public class DataStore
 {
     private static readonly string DBStore = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "WhiteRabbit-3.0");
 
-    private readonly Dictionary<DateTime, List<Activity>> myActivities = [];
-
-    public IReadOnlyCollection<Activity> Day(DateTime date)
+    public DataStore()
     {
-        return myActivities.GetValueOrDefault(date.Date) ?? [];
+        if (!Directory.Exists(DBStore))
+        {
+            Directory.CreateDirectory(DBStore);
+        }
     }
+
+    public IReadOnlyCollection<Activity> GetActivities(DateTime date)
+    {
+        var file = GetFile(date);
+        return File.Exists(file)
+            ? JsonConvert.DeserializeObject<List<Activity>>(File.ReadAllText(file)) ?? []
+            : [];
+    }
+
+    private static string GetFile(DateTime date) =>
+        Path.Combine(DBStore, $"{date:yyyy-MM-dd}.json");
 
     public void AddActivity(Activity activity)
     {
@@ -19,16 +33,12 @@ public class DataStore
             return;
         }
 
-        if (!myActivities.TryGetValue(date.Value, out var activities))
-        {
-            activities = [];
-            myActivities.Add(date.Value, activities);
-        }
+        var activities = GetActivities(date.Value).ToList();
         activities.Add(activity);
+
+        Update(date.Value, activities);
     }
 
-    public void Update(DateTime date, IEnumerable<Activity> activities)
-    {
-        myActivities[date.Date] = activities.ToList();
-    }
+    public void Update(DateTime date, IEnumerable<Activity> activities) =>
+        File.WriteAllText(GetFile(date), JsonConvert.SerializeObject(activities, Formatting.Indented));
 }

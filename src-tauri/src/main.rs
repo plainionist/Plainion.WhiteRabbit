@@ -5,7 +5,7 @@ use tauri_dotnet_bridge_host;
 
 #[tauri::command]
 fn dotnet_request(request: &str) -> String {
-    println!("Request: {}", request);
+    // println!("Request: {}", request);
     tauri_dotnet_bridge_host::process_request(request)
 }
 
