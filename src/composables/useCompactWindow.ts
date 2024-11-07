@@ -27,7 +27,9 @@ export function useCompactWindow() {
 
       await window.setSize(originalSize)
       await window.setPosition(originalPosition)
-    }
+      await window.setAlwaysOnTop(false)
+      await window.setSkipTaskbar(false)
+      }
   }
 
   return {
