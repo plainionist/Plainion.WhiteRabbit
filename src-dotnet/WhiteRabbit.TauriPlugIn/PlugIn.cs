@@ -7,6 +7,8 @@ public class PlugIn : IPlugIn
 {
     public void Initialize(IServiceCollection services)
     {
+        services.AddSingleton<DataStore>();
         services.AddSingleton<HomeController>();
+        services.AddSingleton<ReportController>();
     }
 }

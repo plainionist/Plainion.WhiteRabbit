@@ -1,4 +1,10 @@
 export interface ReportEntry {
   comment: string
-  totalTime: number
+  duration: number
+}
+
+export interface ReportVM {
+  headline: string
+  entries: ReportEntry[]
+  total: string
 }

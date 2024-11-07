@@ -1,19 +1,26 @@
 <template>
   <div class="report-overlay">
     <div class="report-content">
-      <table>
+      <h2 class="text-center font-bold text-lg mb-4">{{ data.headline }}</h2>
+      <table class="w-full">
         <thead>
           <tr>
-            <th style="width: 100%; text-align: left">Comment</th>
-            <th>Total Time</th>
+            <th class="text-left">Comment</th>
+            <th class="text-right">Duration</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(entry, index) in reportData" :key="index">
-            <td>{{ entry.comment }}</td>
-            <td>{{ formatTotalTime(entry.totalTime) }}</td>
+          <tr v-for="(entry, index) in data.entries" :key="index">
+            <td class="text-left">{{ entry.comment }}</td>
+            <td class="text-right">{{ entry.duration }}</td>
           </tr>
         </tbody>
+        <tfoot>
+          <tr>
+            <td class="text-left font-bold">Total</td>
+            <td class="text-right">{{ data.total }}</td>
+          </tr>
+        </tfoot>
       </table>
       <button @click="$emit('close')" class="close-button">Close</button>
     </div>
@@ -21,26 +28,14 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue'
-  import type { ReportEntry } from '../types/types';
+  import { defineComponent, PropType } from 'vue'
+  import type { ReportVM } from '../types/types'
 
   export default defineComponent({
     props: {
-      reportData: {
-        type: Array<ReportEntry>,
+      data: {
+        type: Object as PropType<ReportVM>,
         required: true
-      }
-    },
-    methods: {
-      formatTotalTime(totalTime: number) {
-        const hours = Math.floor(totalTime / 3600)
-          .toString()
-          .padStart(2, '0')
-        const minutes = Math.floor((totalTime % 3600) / 60)
-          .toString()
-          .padStart(2, '0')
-        const seconds = (totalTime % 60).toString().padStart(2, '0')
-        return `${hours}:${minutes}:${seconds}`
       }
     }
   })

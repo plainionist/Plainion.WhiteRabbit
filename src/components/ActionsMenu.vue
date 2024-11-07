@@ -10,7 +10,7 @@
       <button @click="openReport('month')">Summary Month</button>
     </div>
   </div>
-  <ReportModal v-if="showReportModal" :reportData="reportData" @close="showReportModal = false" />
+  <ReportModal v-if="showReportModal && reportVM" :data="reportVM" @close="showReportModal = false" />
 </template>
 
 <script lang="ts">
@@ -18,13 +18,13 @@
   import ReportModal from './ReportModal.vue'
   import { TauriApi } from '../TauriApi'
   import { listen } from '@tauri-apps/api/event'
-  import type { ReportEntry } from '../types/types';
+  import type { ReportVM } from '../types/types'
 
   export default defineComponent({
     components: { ReportModal },
     setup() {
       const showReportModal = ref(false)
-      const reportData: Ref<Array<ReportEntry>> = ref([])
+      const reportVM: Ref<ReportVM | null> = ref(null)
       const showMenu = ref(false)
       const selectedDate = ref(new Date())
 
@@ -33,22 +33,21 @@
       }
 
       async function openReport(period: string) {
-        const data = await TauriApi.invokePlugin<Array<ReportEntry>>({
-          controller: 'home',
-          action: 'report',
-          data: { date: selectedDate.value, period }
+        reportVM.value = await TauriApi.invokePlugin<ReportVM>({
+          controller: 'report',
+          action: period,
+          data: { date: selectedDate.value.toLocaleDateString() }
         })
 
         showMenu.value = false
-        reportData.value = data ?? []
-        showReportModal.value = true
+        showReportModal.value = reportVM.value !== null
       }
 
       listen<string>('date-selected', async (event) => {
         selectedDate.value = new Date(event.payload)
       })
 
-      return { showReportModal, reportData, openReport, showMenu, toggleMenu }
+      return { showReportModal, reportVM, openReport, showMenu, toggleMenu }
     }
   })
 </script>
