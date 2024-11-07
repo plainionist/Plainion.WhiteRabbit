@@ -15,10 +15,10 @@
             <td class="text-right">{{ entry.duration }}</td>
           </tr>
         </tbody>
-        <tfoot>
+        <tfoot class="m-10">
           <tr>
-            <td class="text-left font-bold">Total</td>
-            <td class="text-right">{{ data.total }}</td>
+            <td class="text-left font-bold pt-4">Total</td>
+            <td class="text-right pt-4">{{ data.total }}</td>
           </tr>
         </tfoot>
       </table>
