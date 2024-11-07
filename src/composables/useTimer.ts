@@ -1,22 +1,22 @@
 import { ref, Ref } from 'vue'
 
 export function useTimer() {
-  let startTime: Date | null = null
+  let stopwatch: Date | null = null
   const elapsedTime: Ref<String | null> = ref(null)
   let intervalId: number | null = null
 
-  function formatElapsedTime(startTime: Date) {
+  function formatElapsedTime(time: Date) {
     const now = new Date()
-    const duration = now.getTime() - startTime.getTime()
+    const duration = now.getTime() - time.getTime()
     return new Date(duration).toISOString().slice(11, 19)
   }
 
-  function startTimer() {
-    startTime = new Date()
+  function startTimer(startTime: Date) {
+    stopwatch = startTime
     elapsedTime.value = '00:00:00'
 
     intervalId = window.setInterval(() => {
-      if (startTime) {
+      if (stopwatch) {
         elapsedTime.value = formatElapsedTime(startTime)
       }
     }, 1000)
@@ -28,9 +28,9 @@ export function useTimer() {
       intervalId = null
     }
 
-    const startedTime = startTime
+    const startedTime = stopwatch
 
-    startTime = null
+    stopwatch = null
     elapsedTime.value = null
 
     return startedTime

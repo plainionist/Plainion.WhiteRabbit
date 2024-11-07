@@ -60,7 +60,7 @@
           emit('measurement-stopped')
         } else {
           minimizeWindow()
-          startTimer()
+          startTimer(new Date())
         }
       }
 
