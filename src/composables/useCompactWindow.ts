@@ -14,7 +14,7 @@ export function useCompactWindow() {
     await window.setAlwaysOnTop(true)
     await window.setSkipTaskbar(true)
 
-    const panelHeight = 50
+    const panelHeight = 43
     await window.setSize(new LogicalSize(originalSize.width, panelHeight))
     await window.setPosition(new LogicalPosition(originalPosition.x, 0))
   }

@@ -1,5 +1,5 @@
 <template>
-  <div class="grid-container">
+  <div class="grid-container pt-2">
     <AgGridVue
       class="ag-theme-alpine"
       :rowData="items"
@@ -83,6 +83,8 @@
         }
       ])
       const gridOptions: Ref<GridOptions> = ref({
+        headerHeight: 35,
+        rowHeight: 35,
         rowSelection: {
           mode: 'singleRow',
           checkboxes: false,

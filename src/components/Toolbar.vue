@@ -1,10 +1,10 @@
 <template>
-  <div class="controls flex items-center gap-2 mb-2">
+  <div class="controls flex items-center gap-2">
     <ActionsMenu />
     <DatePicker />
     <button
       @click="toggleTimer"
-      class="flex items-center justify-center w-10 h-10 bg-blue-500 text-white rounded-full hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-50"
+      class="flex items-center justify-center w-8 h-8 bg-blue-500 text-white rounded-full hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-50"
       :disabled="!isToday"
     >
       <font-awesome-icon :icon="isTiming ? 'stop' : 'play'" />
@@ -12,7 +12,7 @@
     <input
       v-model="comment"
       placeholder="Enter comment"
-      class="border border-gray-300 px-2 py-1 rounded focus:outline-none focus:border-blue-500 w-72"
+      class="border border-gray-300 px-2 py-1 rounded focus:outline-none focus:border-blue-500 w-72 h-8"
       ref="commentInput"
     />
     <span class="border border-gray-300 px-2 py-1 rounded" v-if="isTiming">{{ elapsedTime }}</span>
