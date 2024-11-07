@@ -13,7 +13,7 @@ export function useTimer() {
 
   function startTimer(startTime: Date) {
     stopwatch = startTime
-    elapsedTime.value = '00:00:00'
+    elapsedTime.value = formatElapsedTime(startTime)
 
     intervalId = window.setInterval(() => {
       if (stopwatch) {

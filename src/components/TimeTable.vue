@@ -1,6 +1,13 @@
 <template>
   <div class="grid-container">
-    <AgGridVue class="ag-theme-alpine" :rowData="items" :columnDefs="columnDefs" @cellValueChanged="onCellValueChanged" />
+    <AgGridVue
+      class="ag-theme-alpine"
+      :rowData="items"
+      :columnDefs="columnDefs"
+      :gridOptions="gridOptions"
+      @cellValueChanged="onCellValueChanged"
+      @rowSelected="onRowSelected"
+    />
   </div>
 </template>
 
@@ -8,18 +15,13 @@
   import { defineComponent, ref, Ref, onMounted } from 'vue'
   import { AgGridVue } from 'ag-grid-vue3'
   import { TauriApi } from '../TauriApi'
-  import { listen } from '@tauri-apps/api/event'
+  import { emit, listen } from '@tauri-apps/api/event'
   import 'ag-grid-community/styles/ag-grid.css'
   import 'ag-grid-community/styles/ag-theme-alpine.css'
   import { faTrash } from '@fortawesome/free-solid-svg-icons'
   import { icon } from '@fortawesome/fontawesome-svg-core'
-
-  interface TableRow {
-    idx: number
-    begin: Date | null
-    end: Date | null
-    comment: string
-  }
+  import { GridOptions } from 'ag-grid-community'
+  import { Activity } from '../types/types'
 
   export default defineComponent({
     components: { AgGridVue },
@@ -80,25 +82,38 @@
           }
         }
       ])
-      const items: Ref<Array<TableRow>> = ref([])
+      const gridOptions: Ref<GridOptions> = ref({
+        rowSelection: {
+          mode: 'singleRow',
+          checkboxes: false,
+          enableClickSelection: true
+        }
+      })
+
+      const items: Ref<Array<Activity>> = ref([])
       const selectedDate = ref(new Date())
 
       async function fetch() {
-        const data =
-          (await TauriApi.invokePlugin<Array<TableRow>>({
-            controller: 'home',
-            action: 'day',
-            data: { date: selectedDate.value.toLocaleDateString() }
-          })) ?? []
+        let data = await TauriApi.invokePlugin<Array<any>>({
+          controller: 'activities',
+          action: 'get',
+          data: { date: selectedDate.value.toLocaleDateString() }
+        })
 
-        const emptyRow: TableRow = { idx: 0, begin: null, end: null, comment: '' }
+        data = (data ?? []).map((item, idx) => ({
+          begin: item.begin ? new Date(item.begin) : null,
+          end: item.end ? new Date(item.end) : null,
+          comment: item.comment,
+          idx
+        }))
 
-        items.value = [...data, emptyRow].map((item, idx) => ({ ...item, idx }))
+        const emptyRow: Activity = { idx: data.length, begin: null, end: null, comment: '' }
+        items.value = [...data, emptyRow]
       }
 
       async function update() {
         await TauriApi.invokePlugin({
-          controller: 'home',
+          controller: 'activities',
           action: 'update',
           data: {
             date: selectedDate.value,
@@ -118,12 +133,33 @@
         update()
       }
 
-      listen('measurement-stopped', () => {
-        fetch()
+      function onRowSelected(evt: any) {
+        if (!evt.node.isSelected()) {
+          return
+        }
+
+        const rowData = evt.node.data
+        if (rowData.begin && !rowData.end) {
+          emit('activity-selected', evt.data)
+        } else {
+          emit('activity-selected', null)
+        }
+      }
+
+      listen('measurement-stopped', (evt: any) => {
+        const activity = evt.payload as Activity
+
+        if (activity.idx === -1) {
+          items.value.push(activity)
+        } else {
+          items.value = items.value.map((item) => (item.idx === activity.idx ? activity : item))
+        }
+
+        update()
       })
 
-      listen<string>('date-selected', async (event) => {
-        selectedDate.value = new Date(event.payload)
+      listen<string>('date-selected', async (evt) => {
+        selectedDate.value = new Date(evt.payload)
         fetch()
       })
 
@@ -131,7 +167,7 @@
         fetch()
       })
 
-      return { items, columnDefs, onCellValueChanged, onDeleteRow }
+      return { items, columnDefs, gridOptions, onCellValueChanged, onDeleteRow, onRowSelected }
     }
   })
 </script>

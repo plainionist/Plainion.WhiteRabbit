@@ -21,13 +21,13 @@
 
 <script lang="ts">
   import { computed, defineComponent, ref, ShallowRef, useTemplateRef } from 'vue'
-  import { TauriApi } from '../TauriApi'
   import DatePicker from './DatePicker.vue'
   import { emit } from '@tauri-apps/api/event'
   import ActionsMenu from './ActionsMenu.vue'
   import { listen } from '@tauri-apps/api/event'
   import { useCompactWindow } from '../composables/useCompactWindow'
   import { useTimer } from '../composables/useTimer'
+  import { Activity } from '../types/types'
 
   export default defineComponent({
     components: { DatePicker, ActionsMenu },
@@ -35,6 +35,7 @@
       const comment = ref('')
       const isToday = ref(true)
       const commentInput: Readonly<ShallowRef<HTMLElement | null>> = useTemplateRef('commentInput')
+      let selectedActivity: Activity | null = null
 
       const { minimizeWindow, restoreWindow } = useCompactWindow()
       const { elapsedTime, startTimer, stopTimer } = useTimer()
@@ -47,26 +48,43 @@
 
           restoreWindow()
 
-          await TauriApi.invokePlugin({
-            controller: 'home',
-            action: 'addActivity',
-            data: {
+          if (selectedActivity) {
+            selectedActivity.end = new Date()
+            selectedActivity.comment = comment.value
+          } else {
+            selectedActivity = {
+              idx: -1,
               begin: startedTime,
               end: new Date(),
               comment: comment.value
             }
-          })
+          }
 
-          emit('measurement-stopped')
+          await emit('measurement-stopped', selectedActivity)
+
+          selectedActivity = null
         } else {
           minimizeWindow()
-          startTimer(new Date())
+          startTimer(selectedActivity?.begin ?? new Date())
         }
       }
 
-      listen<string>('date-selected', async (event) => {
-        isToday.value = new Date(event.payload).toDateString() === new Date().toDateString()
+      listen<string>('date-selected', async (evt: any) => {
+        isToday.value = new Date(evt.payload).toDateString() === new Date().toDateString()
         commentInput.value?.focus()
+      })
+
+      listen<string>('activity-selected', async (evt: any) => {
+        if (!evt.payload) {
+          selectedActivity = null
+        } else {
+          selectedActivity = {
+            begin: evt.payload.begin ? new Date(evt.payload.begin) : null,
+            end: evt.payload.end ? new Date(evt.payload.end) : null,
+            comment: evt.payload.comment,
+            idx: evt.payload.idx
+          }
+        }
       })
 
       return { isTiming, comment, elapsedTime, toggleTimer, isToday }

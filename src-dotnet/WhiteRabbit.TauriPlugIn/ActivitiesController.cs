@@ -11,15 +11,12 @@ public class UpdateRequest
     public Activity[]? Items { get; set; }
 }
 
-public class HomeController(DataStore dataStore)
+public class ActivitiesController(DataStore dataStore)
 {
     private readonly DataStore myDataStore = dataStore;
-    
-    public IReadOnlyCollection<Activity> Day(DayRequest request) => 
-        myDataStore.GetActivities(request.Date);
 
-    public void AddActivity(Activity activity) => 
-        myDataStore.AddActivity(activity);
+    public IReadOnlyCollection<Activity> Get(DayRequest request) =>
+        myDataStore.GetActivities(request.Date);
 
     public void Update(UpdateRequest request)
     {

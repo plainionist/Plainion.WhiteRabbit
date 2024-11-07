@@ -25,20 +25,6 @@ public class DataStore
     private static string GetFile(DateTime date) =>
         Path.Combine(DBStore, $"{date:yyyy-MM-dd}.json");
 
-    public void AddActivity(Activity activity)
-    {
-        var date = activity.Begin?.Date.Date;
-        if (date == null)
-        {
-            return;
-        }
-
-        var activities = GetActivities(date.Value).ToList();
-        activities.Add(activity);
-
-        Update(date.Value, activities);
-    }
-
     public void Update(DateTime date, IEnumerable<Activity> activities) =>
         File.WriteAllText(GetFile(date), JsonConvert.SerializeObject(activities, Formatting.Indented));
 }
