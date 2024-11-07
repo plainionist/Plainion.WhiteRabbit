@@ -120,12 +120,23 @@
             items: items.value
           }
         })
+
         // make sure that backend is the only master
-        fetch()
+        await fetch()
       }
 
-      async function onCellValueChanged() {
-        update()
+      async function onCellValueChanged(params: any) {
+        await update()
+
+        // somehow still not working ...
+        if (params.node.isSelected()) {
+          params.node.setSelected(false)
+          setTimeout(() => {
+            params.node.setSelected(true)
+          }, 150)
+        } else {
+          params.node.setSelected(true)
+        }
       }
 
       async function onDeleteRow(rowData: any) {

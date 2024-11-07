@@ -65,6 +65,7 @@
           selectedActivity = null
         } else {
           minimizeWindow()
+          comment.value = selectedActivity?.comment ?? comment.value
           startTimer(selectedActivity?.begin ?? new Date())
         }
       }
