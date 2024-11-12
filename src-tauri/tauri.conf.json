@@ -6,7 +6,7 @@
   "build": {
     "beforeDevCommand": "dotnet build src-dotnet && pnpm dev",
     "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "dotnet publish -c Release src-dotnet/src-dotnet.sln && pnpm build",
+    "beforeBuildCommand": "dotnet build -c Release src-dotnet/src-dotnet.sln && pnpm build",
     "frontendDist": "../dist"
   },
   "app": {
