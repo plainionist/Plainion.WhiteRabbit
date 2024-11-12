@@ -27,9 +27,14 @@
     components: { AgGridVue },
     setup() {
       function timeValueFormatter(params: any) {
-        if (params.value === null) return ''
+        if (!params.value) return ''
         const date = new Date(params.value)
         return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })
+      }
+
+      function durationFormatter(params: any) {
+        if (!params.value) return ''
+        return params.value.split(":").slice(0, 2).join(":")
       }
 
       function timeValueParser(params: any) {
@@ -67,6 +72,15 @@
           valueFormatter: timeValueFormatter,
           valueParser: timeValueParser
         },
+        {
+          headerName: 'Duration',
+          field: 'duration',
+          editable: false,
+          resizable: false,
+          suppressMovable: true,
+          width: 100,
+          valueFormatter: durationFormatter
+        },
         { headerName: 'Comment', field: 'comment', editable: true, resizable: false, suppressMovable: true, flex: 1 },
         {
           headerName: '',
@@ -101,10 +115,11 @@
           action: 'get',
           data: { date: selectedDate.value.toLocaleDateString() }
         })
-
+        
         data = (data ?? []).map((item, idx) => ({
           begin: item.begin ? new Date(item.begin) : null,
           end: item.end ? new Date(item.end) : null,
+          duration: item.duration,
           comment: item.comment,
           idx
         }))

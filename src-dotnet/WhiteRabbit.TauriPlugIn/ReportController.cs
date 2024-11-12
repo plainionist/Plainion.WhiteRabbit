@@ -35,7 +35,7 @@ public class ReportController(DataStore dataStore)
         var total = new TimeSpan();
         foreach (var activity in days.SelectMany(myDataStore.GetActivities))
         {
-            var duration = activity.GetDuration();
+            var duration = activity.Duration;
             if (duration == null)
             {
                 continue;
