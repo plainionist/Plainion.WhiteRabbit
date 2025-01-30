@@ -57,6 +57,7 @@ public class ReportController(DataStore dataStore)
             Headline = days.Count() == 1
                 ? $"{days.Single():yyyy-MM-dd}"
                 : $"{days.Min():yyyy-MM-dd} - {days.Max():yyyy-MM-dd}",
+
             Entries = durationByComment
                 .Select(entry => new ReportEntry
                 {
@@ -65,6 +66,7 @@ public class ReportController(DataStore dataStore)
                 })
                 .OrderByDescending(entry => entry.Duration)
                 .ToList(),
+
             Total = total.ToString("hh\\:mm")
         };
     }
@@ -110,6 +112,4 @@ public class ReportController(DataStore dataStore)
         var end = new DateTime(request.Date.Year, request.Date.Month, DateTime.DaysInMonth(request.Date.Year, request.Date.Month));
         return CreateReport(GetDays(begin, end));
     }
-
 }
-
