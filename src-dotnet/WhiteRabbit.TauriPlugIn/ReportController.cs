@@ -32,8 +32,6 @@ public class ReportController(DataStore dataStore)
             .ToList();
 
         var durationByComment = new Dictionary<string, TimeSpan>(StringComparer.OrdinalIgnoreCase);
-
-        var total = new TimeSpan();
         foreach (var activity in activities)
         {
             var comment = string.IsNullOrWhiteSpace(activity.Comment) ? "<empty>" : activity.Comment;
@@ -46,9 +44,9 @@ public class ReportController(DataStore dataStore)
             {
                 durationByComment[comment] += activity.Duration!.Value;
             }
-
-            total += activity.Duration!.Value;
         }
+
+        var total = durationByComment.Sum(x => x.Value.TotalMinutes);
 
         return new ReportVM
         {
@@ -65,7 +63,7 @@ public class ReportController(DataStore dataStore)
                 .OrderByDescending(entry => entry.Duration)
                 .ToList(),
 
-            Total = FormatDuration(total)
+            Total = FormatDuration(TimeSpan.FromMinutes(total))
         };
     }
 
