@@ -62,14 +62,18 @@ public class ReportController(DataStore dataStore)
                 .Select(entry => new ReportEntry
                 {
                     Comment = entry.Key,
-                    Duration = entry.Value.ToString("hh\\:mm")
+                    Duration = FormatDuration(entry.Value)
                 })
                 .OrderByDescending(entry => entry.Duration)
                 .ToList(),
 
-            Total = total.ToString("hh\\:mm")
+            Total = FormatDuration(total)
         };
     }
+
+    // support hours > 24
+    private string FormatDuration(TimeSpan value) =>
+        $"{(int)value.TotalHours:D2}:{value.Minutes:D2}";
 
     public ReportVM Week(DayRequest request)
     {
