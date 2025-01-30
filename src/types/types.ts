@@ -1,11 +1,17 @@
-export interface ReportEntry {
+export interface ReportEntryVM {
   comment: string
   duration: number
 }
 
+export interface ReportGroupVM {
+  headline: string
+  entries: ReportEntryVM[]
+  total: string
+}
+
 export interface ReportVM {
   headline: string
-  entries: ReportEntry[]
+  groups: ReportGroupVM[]
   total: string
 }
 

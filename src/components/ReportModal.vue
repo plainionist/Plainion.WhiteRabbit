@@ -2,26 +2,37 @@
   <div class="report-overlay">
     <div class="report-content">
       <h2 class="text-center font-bold text-lg mb-4">{{ data.headline }}</h2>
-      <table class="w-full">
-        <thead>
-          <tr>
-            <th class="text-left">Comment</th>
-            <th class="text-right">Duration</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(entry, index) in data.entries" :key="index">
-            <td class="text-left">{{ entry.comment }}</td>
-            <td class="text-right">{{ entry.duration }}</td>
-          </tr>
-        </tbody>
-        <tfoot class="m-10">
-          <tr>
-            <td class="text-left font-bold pt-4">Total</td>
-            <td class="text-right pt-4">{{ data.total }}</td>
-          </tr>
-        </tfoot>
-      </table>
+
+      <div v-for="group in data.groups" v-bind:key="group.headline">
+        <h2 v-if="data.groups.length > 1" class="text-center font-bold text-lg mt-4">{{ group.headline }}</h2>
+
+        <table class="w-full">
+          <thead>
+            <tr>
+              <th class="text-left">Comment</th>
+              <th class="text-right">Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(entry, index) in group.entries" :key="index">
+              <td class="text-left">{{ entry.comment }}</td>
+              <td class="text-right">{{ entry.duration }}</td>
+            </tr>
+          </tbody>
+          <tfoot class="m-10">
+            <tr>
+              <td class="text-left font-bold pt-1">Total</td>
+              <td class="text-right pt-1">{{ group.total }}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div v-if="data.groups?.length > 1" class="font-bold text-lg mb-4 mt-4 w-full flex">
+        <span class="text-left font-bold pt-4 w-full">Total</span>
+        <span class="text-right pt-4">{{ data.total }}</span>
+      </div>
+
       <button @click="$emit('close')" class="close-button">Close</button>
     </div>
   </div>

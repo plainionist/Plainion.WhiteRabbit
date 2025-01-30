@@ -143,6 +143,13 @@
   }
 
   async function onCellValueChanged(params: any) {
+    // since AgGrid v33 the "params.data" contains the new value but 
+    // "items" is not yet updated when getting here. reason unclear :(
+    // workaround: copy over data manually
+    let item = items.value.find(x=> x.idx === params.data.idx)
+    item[params.colDef.field] = params.data[params.colDef.field]
+    console.log(params)
+    console.log(items.value)
     await update()
 
     // somehow still not working ...

@@ -8,11 +8,18 @@ public class ReportRequest
 public class ReportVM
 {
     public string? Headline { get; set; }
-    public List<ReportEntry>? Entries { get; set; }
+    public List<ReportGroupVM>? Groups { get; set; }
     public string? Total { get; set; }
 }
 
-public class ReportEntry
+public class ReportGroupVM
+{
+    public string? Headline { get; set; }
+    public List<ReportEntryVM>? Entries { get; set; }
+    public string? Total { get; set; }
+}
+
+public class ReportEntryVM
 {
     public string? Comment { get; set; }
     public string? Duration { get; set; }
@@ -46,7 +53,13 @@ public class ReportController(DataStore dataStore)
             }
         }
 
-        var total = durationByComment.Sum(x => x.Value.TotalMinutes);
+        var groups = durationByComment
+            .GroupBy(x =>
+            {
+                var tokens = x.Key.Split('/');
+                return tokens.Length > 1 ? tokens[0] : "Default";
+            }, StringComparer.OrdinalIgnoreCase)
+            .ToList();
 
         return new ReportVM
         {
@@ -54,16 +67,25 @@ public class ReportController(DataStore dataStore)
                 ? $"{days.Single():yyyy-MM-dd}"
                 : $"{days.Min():yyyy-MM-dd} - {days.Max():yyyy-MM-dd}",
 
-            Entries = durationByComment
-                .Select(entry => new ReportEntry
-                {
-                    Comment = entry.Key,
-                    Duration = FormatDuration(entry.Value)
-                })
-                .OrderByDescending(entry => entry.Duration)
+            Groups = groups
+                .Select(group =>
+                    new ReportGroupVM
+                    {
+                        Headline = group.Key,
+                        Entries = group
+                            .Select(entry => new ReportEntryVM
+                            {
+                                Comment = entry.Key,
+                                Duration = FormatDuration(entry.Value)
+                            })
+                            .OrderByDescending(entry => entry.Duration)
+                            .ToList(),
+                        Total = FormatDuration(TimeSpan.FromMinutes(group.Sum(x => x.Value.TotalMinutes)))
+                    }
+                )
                 .ToList(),
 
-            Total = FormatDuration(TimeSpan.FromMinutes(total))
+            Total = FormatDuration(TimeSpan.FromMinutes(durationByComment.Sum(x => x.Value.TotalMinutes)))
         };
     }
 
