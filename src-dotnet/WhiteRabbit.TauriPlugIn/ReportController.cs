@@ -27,29 +27,27 @@ public class ReportController(DataStore dataStore)
 
     private ReportVM CreateReport(IEnumerable<DateTime> days)
     {
+        var activities = days.SelectMany(myDataStore.GetActivities)
+            .Where(x => x.Duration != null && x.Duration.Value.TotalMinutes > 1)
+            .ToList();
+
         var durationByComment = new Dictionary<string, TimeSpan>(StringComparer.OrdinalIgnoreCase);
 
         var total = new TimeSpan();
-        foreach (var activity in days.SelectMany(myDataStore.GetActivities))
+        foreach (var activity in activities)
         {
-            var duration = activity.Duration;
-            if (duration == null || duration.Value.TotalMinutes < 1)
-            {
-                continue;
-            }
-
             var comment = string.IsNullOrWhiteSpace(activity.Comment) ? "<empty>" : activity.Comment;
 
             if (!durationByComment.ContainsKey(comment))
             {
-                durationByComment[comment] = duration.Value;
+                durationByComment[comment] = activity.Duration!.Value;
             }
             else
             {
-                durationByComment[comment] += duration.Value;
+                durationByComment[comment] += activity.Duration!.Value;
             }
 
-            total += duration.Value;
+            total += activity.Duration!.Value;
         }
 
         return new ReportVM
