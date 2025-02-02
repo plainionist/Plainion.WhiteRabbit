@@ -153,15 +153,10 @@
 
     await update()
 
-    // somehow still not working ...
-    if (params.node.isSelected()) {
-      params.node.setSelected(false)
-      setTimeout(() => {
-        params.node.setSelected(true)
-      }, 150)
-    } else {
+    // make sure row remains selected after editing
+    setTimeout(() => {
       params.node.setSelected(true)
-    }
+    }, 150)
   }
 
   async function onDeleteRow(rowData: any) {
@@ -175,6 +170,7 @@
     }
 
     const rowData = evt.node.data
+    console.log(rowData)
     if (rowData.begin && !rowData.end) {
       emit('activity-selected', evt.data)
     } else {
