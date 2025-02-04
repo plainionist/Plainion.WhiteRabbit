@@ -24,6 +24,9 @@
   "bundle": {
     "active": false,
     "targets": "msi",
-    "icon": ["icons/icon.ico"]
+    "icon": ["icons/icon.ico"],
+    "resources": {
+      "./target/Release/dotnet/*" : "dotnet/"
+    }
   }
 }
