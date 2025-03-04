@@ -45,7 +45,7 @@ public class DataStore
             StartInfo = new ProcessStartInfo
             {
                 FileName = "git",
-                Arguments = "commit -am '.'",
+                Arguments = "commit -am \".\"",
                 WorkingDirectory = DBStore,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
