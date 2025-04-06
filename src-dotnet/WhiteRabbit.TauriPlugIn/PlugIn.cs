@@ -10,5 +10,7 @@ public class PlugIn : IPlugIn
         services.AddSingleton<DataStore>();
         services.AddSingleton<ActivitiesController>();
         services.AddSingleton<ReportController>();
+        services.AddSingleton<AppDataRoot>();
+        services.AddSingleton<ILogger, FileLogger>();
     }
 }

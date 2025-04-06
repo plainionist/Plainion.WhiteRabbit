@@ -5,14 +5,13 @@ namespace WhiteRabbit.TauriPlugIn;
 
 public class DataStore
 {
-    private static readonly string DBStore = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "WhiteRabbit-3.0");
+    private readonly ILogger myLogger;
+    private readonly string myDBStore;
 
-    public DataStore()
+    public DataStore(ILogger logger, AppDataRoot root)
     {
-        if (!Directory.Exists(DBStore))
-        {
-            Directory.CreateDirectory(DBStore);
-        }
+        myLogger = logger;
+        myDBStore = root.Location;
     }
 
     public IReadOnlyCollection<Activity> GetActivities(DateTime date)
@@ -23,8 +22,8 @@ public class DataStore
             : [];
     }
 
-    private static string GetFile(DateTime date) =>
-        Path.Combine(DBStore, $"{date:yyyy-MM-dd}.json");
+    private string GetFile(DateTime date) =>
+        Path.Combine(myDBStore, $"{date:yyyy-MM-dd}.json");
 
     public void Update(DateTime date, IEnumerable<Activity> activities)
     {
@@ -35,8 +34,9 @@ public class DataStore
 
     private void CommitOnDemand()
     {
-        if (!Directory.Exists(Path.Combine(DBStore, ".git")))
+        if (!Directory.Exists(Path.Combine(myDBStore, ".git")))
         {
+            myLogger.Warning("No git repository found. Skipping commit.");
             return;
         }
 
@@ -46,17 +46,82 @@ public class DataStore
             {
                 FileName = "git",
                 Arguments = "commit -am \".\"",
-                WorkingDirectory = DBStore,
+                WorkingDirectory = myDBStore,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
                 CreateNoWindow = true
+            },
+            EnableRaisingEvents = true
+        };
+
+        void LogOutput(object sender, DataReceivedEventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(e.Data))
+            {
+                myLogger.Info(e.Data);
             }
+        }
+
+        git.OutputDataReceived += LogOutput;
+        git.ErrorDataReceived += LogOutput;
+
+        void OnExit(object? sender, EventArgs e)
+        {
+            git.OutputDataReceived -= LogOutput;
+            git.ErrorDataReceived -= LogOutput;
+            git.Exited -= OnExit;
+
+            myLogger.Info($"Git process exited with code {git.ExitCode}");
+            git.Dispose();
+        }
+
+        git.Exited += OnExit;
+
+        git.Start();
+        git.BeginOutputReadLine();
+        git.BeginErrorReadLine();
+
+    }
+
+ private void RunGitCommand(string args)
+    {
+        var git = new Process
+        {
+            StartInfo = new ProcessStartInfo
+            {
+                FileName = "git",
+                Arguments = args,
+                WorkingDirectory = myDBStore,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            },
+            EnableRaisingEvents = true
+        };
+
+        git.OutputDataReceived += (sender, e) =>
+        {
+            if (!string.IsNullOrWhiteSpace(e.Data))
+                myLogger.Info($"[git stdout] {e.Data}");
+        };
+
+        git.ErrorDataReceived += (sender, e) =>
+        {
+            if (!string.IsNullOrWhiteSpace(e.Data))
+                myLogger.Error($"[git stderr] {e.Data}");
+        };
+
+        git.Exited += (sender, e) =>
+        {
+            myLogger.Info($"Git process '{args}' exited with code {git.ExitCode}");
+            git.Dispose();
         };
 
         git.Start();
-
-        // don' block the UI
-        //git.WaitForExit();
+        git.BeginOutputReadLine();
+        git.BeginErrorReadLine();
     }
+
 }
