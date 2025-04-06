@@ -34,18 +34,35 @@ public class DataStore
 
     private void CommitOnDemand()
     {
-        if (!Directory.Exists(Path.Combine(myDBStore, ".git")))
+        // don't block the UI thread
+        Task.Run(() =>
         {
-            myLogger.Warning("No git repository found. Skipping commit.");
-            return;
-        }
+            try
+            {
+                if (!Directory.Exists(Path.Combine(myDBStore, ".git")))
+                {
+                    myLogger.Warning("No git repository found. Skipping commit.");
+                    return;
+                }
 
-        var git = new Process
+                RunGitCommand("add .");
+                RunGitCommand("commit -m \".\"");
+            }
+            catch (Exception e)
+            {
+                myLogger.Error($"Error during commit: {e.Message}");
+            }
+        });
+    }
+
+    private void RunGitCommand(string args)
+    {
+        using var git = new Process
         {
             StartInfo = new ProcessStartInfo
             {
                 FileName = "git",
-                Arguments = "commit -am \".\"",
+                Arguments = args,
                 WorkingDirectory = myDBStore,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -66,62 +83,16 @@ public class DataStore
         git.OutputDataReceived += LogOutput;
         git.ErrorDataReceived += LogOutput;
 
-        void OnExit(object? sender, EventArgs e)
-        {
-            git.OutputDataReceived -= LogOutput;
-            git.ErrorDataReceived -= LogOutput;
-            git.Exited -= OnExit;
-
-            myLogger.Info($"Git process exited with code {git.ExitCode}");
-            git.Dispose();
-        }
-
-        git.Exited += OnExit;
 
         git.Start();
         git.BeginOutputReadLine();
         git.BeginErrorReadLine();
 
+        git.WaitForExit();
+
+        git.OutputDataReceived -= LogOutput;
+        git.ErrorDataReceived -= LogOutput;
+
+        myLogger.Info($"Git process '{args}' exited with code {git.ExitCode}");
     }
-
- private void RunGitCommand(string args)
-    {
-        var git = new Process
-        {
-            StartInfo = new ProcessStartInfo
-            {
-                FileName = "git",
-                Arguments = args,
-                WorkingDirectory = myDBStore,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            },
-            EnableRaisingEvents = true
-        };
-
-        git.OutputDataReceived += (sender, e) =>
-        {
-            if (!string.IsNullOrWhiteSpace(e.Data))
-                myLogger.Info($"[git stdout] {e.Data}");
-        };
-
-        git.ErrorDataReceived += (sender, e) =>
-        {
-            if (!string.IsNullOrWhiteSpace(e.Data))
-                myLogger.Error($"[git stderr] {e.Data}");
-        };
-
-        git.Exited += (sender, e) =>
-        {
-            myLogger.Info($"Git process '{args}' exited with code {git.ExitCode}");
-            git.Dispose();
-        };
-
-        git.Start();
-        git.BeginOutputReadLine();
-        git.BeginErrorReadLine();
-    }
-
 }
